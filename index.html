@@ -135,7 +135,7 @@
 <div id="modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center">
   <div class="bg-neo-yellow border-4 border-black shadow-neo-xl p-6 w-full max-w-sm mx-4">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="font-display text-2xl tracking-wide text-neo-dark">ЁЯФР DEVELOPER ACCESS</h2>
+      <h2 class="font-display text-2xl tracking-wide text-neo-dark">DEVELOPER ACCESS</h2>
       <button onclick="closeModal()" class="border-2 border-black bg-neo-pink px-2 py-1 text-xs font-bold shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all">тЬХ</button>
     </div>
     <p class="text-xs mb-3 font-mono text-neo-dark">Masukkan PIN developer untuk mengaktifkan mode admin:</p>
@@ -147,16 +147,16 @@
       class="w-full border-4 border-black p-3 bg-white font-mono text-lg shadow-neo-in focus:outline-none focus:bg-neo-blue/20 mb-3"
     />
     <button onclick="verifyPin()" class="w-full bg-neo-dark text-neo-yellow border-4 border-black font-bold py-3 shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono">
-      UNLOCK тЦ╢
+      UNLOCK 
     </button>
-    <p class="text-xs text-center mt-3 text-neo-dark/60 font-mono">PIN salah = akses ditolak тЫФ</p>
+    <p class="text-xs text-center mt-3 text-neo-dark/60 font-mono">PIN salah = akses ditolak</p>
   </div>
 </div>
 
 <!-- ===================== DELETE CONFIRM MODAL ===================== -->
 <div id="delete-modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center">
   <div class="bg-neo-pink border-4 border-black shadow-neo-xl p-6 w-full max-w-sm mx-4">
-    <h2 class="font-display text-2xl tracking-wide text-neo-dark mb-2">тЪая╕П KONFIRMASI HAPUS</h2>
+    <h2 class="font-display text-2xl tracking-wide text-neo-dark mb-2">KONFIRMASI HAPUS</h2>
     <p id="delete-modal-msg" class="text-xs font-mono mb-6 text-neo-dark">Yakin ingin menghapus item ini?</p>
     <div class="flex gap-3">
       <button onclick="closeDeleteModal()" class="flex-1 border-4 border-black bg-white font-bold py-2 shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono text-sm">BATAL</button>
@@ -187,7 +187,7 @@
       </div>
       <!-- Lock button -->
       <button id="lock-btn" onclick="openModal()" title="Developer Login" class="border-3 border-black bg-white p-2 shadow-neo text-lg hover:bg-neo-pink hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all leading-none">
-        ЁЯФТ
+        
       </button>
       <!-- Logout (admin only) -->
       <button id="logout-btn" onclick="logout()" class="hidden border-3 border-black bg-neo-pink px-3 py-2 text-xs font-bold shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono">
@@ -217,7 +217,7 @@
 
     <!-- Sidebar header -->
     <div class="border-b-4 border-black bg-neo-dark px-4 py-3 flex items-center justify-between sticky top-0">
-      <span class="font-display text-xl tracking-widest text-neo-yellow">ЁЯУБ PROJECTS</span>
+      <span class="font-display text-xl tracking-widest text-neo-yellow">PROJECTS</span>
       <!-- Create folder (admin) -->
       <button id="create-folder-btn" onclick="showCreateFolderForm()" class="hidden border-2 border-neo-yellow bg-neo-yellow text-neo-dark px-2 py-1 text-xs font-bold shadow-[2px_2px_0_0_rgba(255,213,79,0.4)] hover:bg-white transition-all font-mono">
         + BARU
@@ -250,9 +250,9 @@
           <p class="font-mono text-sm text-neo-dark font-bold">Sistem dokumentasi terpusat.<br/>Pilih folder dari sidebar untuk memulai.</p>
         </div>
         <div class="flex flex-wrap justify-center gap-3 text-xs font-mono">
-          <span class="border-2 border-black bg-neo-green px-3 py-1 shadow-neo">ЁЯУВ Multi-Project</span>
-          <span class="border-2 border-black bg-neo-blue px-3 py-1 shadow-neo">тЪб Real-time Supabase</span>
-          <span class="border-2 border-black bg-neo-pink px-3 py-1 shadow-neo">ЁЯФТ Admin CRUD</span>
+          <span class="border-2 border-black bg-neo-green px-3 py-1 shadow-neo">Amati</span>
+          <span class="border-2 border-black bg-neo-blue px-3 py-1 shadow-neo">Tiru</span>
+          <span class="border-2 border-black bg-neo-pink px-3 py-1 shadow-neo">Plek Ketiplek</span>
         </div>
       </div>
     </div>
@@ -269,7 +269,7 @@
           </div>
           <!-- Delete folder (admin) -->
           <button id="delete-folder-btn" onclick="confirmDeleteFolder()" class="hidden border-3 border-neo-pink bg-neo-pink px-3 py-2 text-xs font-bold shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono whitespace-nowrap self-start">
-            ЁЯЧС HAPUS FOLDER
+            HAPUS FOLDER
           </button>
         </div>
       </div>
@@ -282,7 +282,7 @@
       <!-- Admin form -->
       <div id="admin-form" class="hidden border-4 border-black bg-neo-yellow/20 shadow-neo-lg p-4 md:p-5">
         <div class="border-b-4 border-black pb-3 mb-4">
-          <span class="font-display text-2xl tracking-widest text-neo-dark">тЮХ TAMBAH DOKUMEN</span>
+          <span class="font-display text-2xl tracking-widest text-neo-dark">TAMBAH DOKUMEN</span>
         </div>
 
         <!-- Title input -->
@@ -291,8 +291,8 @@
 
         <!-- Tabs -->
         <div class="flex border-4 border-black mb-0 overflow-hidden">
-          <button id="tab-paste" onclick="switchTab('paste')" class="tab-btn active flex-1 py-2 text-xs font-bold border-r-2 border-black font-mono transition-all">ЁЯУЛ PASTE SKRIP</button>
-          <button id="tab-upload" onclick="switchTab('upload')" class="tab-btn flex-1 py-2 text-xs font-bold font-mono bg-white text-neo-dark transition-all">ЁЯУБ UPLOAD FILE</button>
+          <button id="tab-paste" onclick="switchTab('paste')" class="tab-btn active flex-1 py-2 text-xs font-bold border-r-2 border-black font-mono transition-all">PASTE SKRIP</button>
+          <button id="tab-upload" onclick="switchTab('upload')" class="tab-btn flex-1 py-2 text-xs font-bold font-mono bg-white text-neo-dark transition-all">UPLOAD FILE</button>
         </div>
 
         <!-- Paste panel -->
@@ -300,7 +300,7 @@
           <label class="block font-mono text-xs font-bold mb-2 text-neo-dark">KONTEN SKRIP</label>
           <textarea id="doc-content" rows="8" placeholder="Tempel kode atau teks di sini..." class="w-full border-4 border-black p-3 bg-neo-bg font-mono text-xs focus:outline-none focus:bg-neo-blue/10 resize-y shadow-neo-in"></textarea>
           <button onclick="saveScript()" class="mt-3 bg-neo-dark text-neo-yellow border-4 border-black py-2 px-6 font-bold text-sm shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono">
-            SIMPAN SKRIP тЦ╢
+            SIMPAN SKRIP
           </button>
         </div>
 
@@ -312,7 +312,7 @@
             <p class="text-xs font-mono text-neo-dark/50 mt-2">Semua tipe file didukung</p>
           </div>
           <button onclick="uploadFile()" class="bg-neo-green border-4 border-black py-2 px-6 font-bold text-sm shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono">
-            UPLOAD FILE тмЖ
+            UPLOAD FILE
           </button>
         </div>
       </div>
@@ -397,13 +397,13 @@ function verifyPin() {
     document.getElementById('pin-input').value = '';
     document.getElementById('pin-input').classList.add('bg-neo-pink/30');
     setTimeout(() => document.getElementById('pin-input').classList.remove('bg-neo-pink/30'), 600);
-    showToast('тЭМ PIN salah. Akses ditolak.', 'pink');
+    showToast('PIN salah. Akses ditolak.', 'pink');
   }
 }
 function logout() {
   isAdmin = false;
   updateAdminUI();
-  showToast('ЁЯСЛ Admin mode dinonaktifkan.', 'blue');
+  showToast('Admin mode dinonaktifkan.', 'blue');
 }
 
 // тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА
@@ -539,7 +539,7 @@ async function loadFolders() {
     });
   } catch (e) {
     console.error(e);
-    showToast('тЭМ Gagal memuat folder: ' + e.message, 'pink');
+    showToast('Gagal memuat folder: ' + e.message, 'pink');
   }
 }
 
@@ -554,10 +554,10 @@ async function createFolder() {
     const { error } = await db.from('projects').insert({ name });
     if (error) throw error;
     hideCreateFolderForm();
-    showToast('тЬЕ Folder berhasil dibuat!', 'green');
+    showToast('Folder berhasil dibuat!', 'green');
     await loadFolders();
   } catch (e) {
-    showToast('тЭМ Gagal membuat folder: ' + e.message, 'pink');
+    showToast('Gagal membuat folder: ' + e.message, 'pink');
   }
 }
 
@@ -692,11 +692,11 @@ function copyCode(btn) {
 //  SAVE SCRIPT
 // тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА
 async function saveScript() {
-  if (!db) return showToast('тЪая╕П Supabase tidak terhubung.', 'pink');
+  if (!db) return showToast('Supabase tidak terhubung.', 'pink');
   const title   = document.getElementById('doc-title').value.trim();
   const content = document.getElementById('doc-content').value.trim();
-  if (!title)   return showToast('тЪая╕П Judul dokumen wajib diisi.', 'yellow');
-  if (!content) return showToast('тЪая╕П Konten skrip tidak boleh kosong.', 'yellow');
+  if (!title)   return showToast('Judul dokumen wajib diisi.', 'yellow');
+  if (!content) return showToast('Konten skrip tidak boleh kosong.', 'yellow');
   try {
     const { error } = await db.from('documentations').insert({
       project_id: currentProjectId,
@@ -707,10 +707,10 @@ async function saveScript() {
     if (error) throw error;
     document.getElementById('doc-title').value = '';
     document.getElementById('doc-content').value = '';
-    showToast('тЬЕ Skrip berhasil disimpan!', 'green');
+    showToast('Skrip berhasil disimpan!', 'green');
     await loadDocs();
   } catch (e) {
-    showToast('тЭМ Gagal menyimpan: ' + e.message, 'pink');
+    showToast('Gagal menyimpan: ' + e.message, 'pink');
   }
 }
 
@@ -745,10 +745,10 @@ async function uploadFile() {
 
     document.getElementById('doc-title').value = '';
     fileEl.value = '';
-    showToast('тЬЕ File berhasil diupload!', 'green');
+    showToast('berhasil diupload!', 'green');
     await loadDocs();
   } catch (e) {
-    showToast('тЭМ Upload gagal: ' + e.message, 'pink');
+    showToast('Upload gagal: ' + e.message, 'pink');
   }
 }
 
@@ -774,10 +774,10 @@ async function deleteDoc(docId, fileUrl) {
     }
     const { error } = await db.from('documentations').delete().eq('id', docId);
     if (error) throw error;
-    showToast('ЁЯЧС Dokumen dihapus.', 'yellow');
+    showToast('Dokumen dihapus.', 'yellow');
     await loadDocs();
   } catch (e) {
-    showToast('тЭМ Gagal menghapus: ' + e.message, 'pink');
+    showToast('Gagal menghapus: ' + e.message, 'pink');
   }
 }
 
@@ -804,10 +804,10 @@ async function deleteFolder() {
     document.getElementById('project-view').classList.add('hidden');
     document.getElementById('welcome-screen').classList.remove('hidden');
 
-    showToast('ЁЯЧС Folder dihapus.', 'yellow');
+    showToast('Folder dihapus.', 'yellow');
     await loadFolders();
   } catch (e) {
-    showToast('тЭМ Gagal menghapus folder: ' + e.message, 'pink');
+    showToast('Gagal menghapus folder: ' + e.message, 'pink');
   }
 }
 
