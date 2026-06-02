@@ -94,76 +94,70 @@
 <div id="modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center">
   <div class="bg-neo-yellow border-4 border-black shadow-neo-xl p-6 w-full max-w-sm mx-4">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="font-display text-2xl tracking-wide text-neo-dark">🔐 DEVELOPER ACCESS</h2>
-      <button onclick="closeModal()" class="border-2 border-black bg-neo-pink px-2 py-1 text-xs font-bold shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all">✕</button>
+      <h2 class="font-display text-2xl tracking-wide text-neo-dark">DEVELOPER ACCESS</h2>
+      <button onclick="closeModal()" class="border-2 border-black bg-neo-pink px-2 py-1 text-xs font-bold shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all">X</button>
     </div>
-    <p class="text-xs mb-3 font-mono text-neo-dark">Masukkan PIN developer untuk mengaktifkan mode admin:</p>
-    <input id="pin-input" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')verifyPin()" class="w-full border-4 border-black p-3 bg-white font-mono text-lg shadow-neo-in focus:outline-none focus:bg-neo-blue/20 mb-3" />
+    <p class="text-xs mb-3 font-mono text-neo-dark">Masukkan PIN developer:</p>
+    <input id="pin-input" type="password" placeholder="PIN" onkeydown="if(event.key==='Enter')verifyPin()" class="w-full border-4 border-black p-3 bg-white font-mono text-lg shadow-neo-in focus:outline-none focus:bg-neo-blue/20 mb-3" />
     <button onclick="verifyPin()" class="w-full bg-neo-dark text-neo-yellow border-4 border-black font-bold py-3 shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono">
-      UNLOCK ▶
+      LOGIN ADMIN
     </button>
   </div>
 </div>
 
 <div id="delete-modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center">
   <div class="bg-neo-pink border-4 border-black shadow-neo-xl p-6 w-full max-w-sm mx-4">
-    <h2 class="font-display text-2xl tracking-wide text-neo-dark mb-2">⚠️ KONFIRMASI HAPUS</h2>
+    <h2 class="font-display text-2xl tracking-wide text-neo-dark mb-2">KONFIRMASI HAPUS</h2>
     <p id="delete-modal-msg" class="text-xs font-mono mb-6 text-neo-dark">Yakin ingin menghapus item ini?</p>
     <div class="flex gap-3">
       <button onclick="closeDeleteModal()" class="flex-1 border-4 border-black bg-white font-bold py-2 shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono text-sm">BATAL</button>
-      <button id="delete-confirm-btn" class="flex-1 border-4 border-black bg-neo-dark text-white font-bold py-2 shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono text-sm">HAPUS ✓</button>
+      <button id="delete-confirm-btn" class="flex-1 border-4 border-black bg-neo-dark text-white font-bold py-2 shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono text-sm">HAPUS</button>
     </div>
   </div>
 </div>
 
 <nav class="sticky top-0 z-40 border-b-4 border-black bg-neo-yellow shadow-neo stripe-bg">
   <div class="flex items-center justify-between px-4 py-3">
-    <button id="hamburger-btn" onclick="toggleSidebar()" class="md:hidden border-3 border-black bg-neo-dark text-neo-yellow p-2 shadow-neo font-bold text-lg leading-none hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all">☰</button>
-
+    <button id="hamburger-btn" onclick="toggleSidebar()" class="md:hidden border-3 border-black bg-neo-dark text-neo-yellow px-3 py-1 shadow-neo font-bold text-sm hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all">MENU</button>
     <div class="flex items-center gap-2">
       <span class="font-display text-3xl tracking-widest text-neo-dark leading-none">INDC</span>
       <span class="border-2 border-black bg-neo-dark text-neo-yellow font-display text-lg px-2 py-0.5 shadow-neo leading-tight">DOCS</span>
     </div>
-
     <div class="flex items-center gap-2">
       <div id="admin-badge" class="hidden border-2 border-black bg-neo-green px-2 py-1 text-xs font-bold shadow-neo pulse">ADMIN MODE</div>
-      <button id="lock-btn" onclick="openModal()" title="Developer Login" class="border-3 border-black bg-white p-2 shadow-neo text-lg hover:bg-neo-pink hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all leading-none">🔒</button>
-      <button id="logout-btn" onclick="logout()" class="hidden border-3 border-black bg-neo-pink px-3 py-2 text-xs font-bold shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono">LOGOUT</button>
+      <button id="lock-btn" onclick="openModal()" class="border-3 border-black bg-white px-3 py-1 shadow-neo text-xs font-bold hover:bg-neo-pink hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all">LOGIN</button>
+      <button id="logout-btn" onclick="logout()" class="hidden border-3 border-black bg-neo-pink px-3 py-1 text-xs font-bold shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono">LOGOUT</button>
     </div>
   </div>
   <div id="admin-topbar" class="hidden admin-bar h-2 border-t-2 border-black"></div>
 </nav>
 
 <div class="flex h-[calc(100vh-65px)] md:h-[calc(100vh-61px)] overflow-hidden relative">
-
   <div id="overlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/50 z-30 hidden opacity-0 md:hidden"></div>
 
   <aside id="sidebar" class="fixed md:static top-[65px] md:top-0 left-0 h-full z-30 md:z-auto w-72 md:w-64 lg:w-72 bg-neo-bg border-r-4 border-black flex flex-col -translate-x-full md:translate-x-0 overflow-y-auto">
     <div class="border-b-4 border-black bg-neo-dark px-4 py-3 flex items-center justify-between sticky top-0">
-      <span class="font-display text-xl tracking-widest text-neo-yellow">📁 PROJECTS</span>
-      <button id="create-folder-btn" onclick="showCreateFolderForm()" class="hidden border-2 border-neo-yellow bg-neo-yellow text-neo-dark px-2 py-1 text-xs font-bold shadow-[2px_2px_0_0_rgba(255,213,79,0.4)] hover:bg-white transition-all font-mono">➕ BARU</button>
+      <span class="font-display text-xl tracking-widest text-neo-yellow">PROJECTS</span>
+      <button id="create-folder-btn" onclick="showCreateFolderForm()" class="hidden border-2 border-neo-yellow bg-neo-yellow text-neo-dark px-2 py-1 text-xs font-bold shadow-[2px_2px_0_0_rgba(255,213,79,0.4)] hover:bg-white transition-all font-mono">+ BARU</button>
     </div>
-
     <div id="create-folder-form" class="hidden border-b-4 border-black bg-neo-yellow/30 px-3 py-3">
       <input id="new-folder-name" type="text" placeholder="Nama folder..." class="w-full border-4 border-black p-2 text-sm bg-white shadow-neo-in focus:outline-none focus:bg-neo-blue/20 font-mono mb-2" />
       <div class="flex gap-2">
         <button onclick="createFolder()" class="flex-1 bg-neo-dark text-neo-yellow border-4 border-black py-1 text-xs font-bold shadow-neo hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all font-mono">BUAT</button>
-        <button onclick="hideCreateFolderForm()" class="border-4 border-black bg-white px-2 py-1 text-xs font-bold shadow-neo hover:bg-neo-pink transition-all font-mono">✕</button>
+        <button onclick="hideCreateFolderForm()" class="border-4 border-black bg-white px-2 py-1 text-xs font-bold shadow-neo hover:bg-neo-pink transition-all font-mono">X</button>
       </div>
     </div>
-
     <div id="folder-list" class="flex-1 px-3 py-3 space-y-2">
       <div class="text-center py-8 text-neo-dark/40 font-mono text-xs">Memuat folder...</div>
     </div>
   </aside>
 
   <main id="main-content" class="flex-1 overflow-y-auto">
-
     <div id="welcome-screen" class="h-full flex items-center justify-center grid-bg">
       <div class="text-center px-8 max-w-lg">
         <div class="font-display text-8xl md:text-9xl text-neo-dark tracking-widest mb-4 leading-none">INDC<br/>DOCS</div>
         <div class="border-4 border-black bg-neo-yellow shadow-neo-lg px-6 py-4 mb-6 inline-block">
-          <p class="font-mono text-sm text-neo-dark font-bold">Sistem dokumentasi terpusat.<br/>Pilih folder dari sidebar untuk memulai.</p>
+          <p class="font-mono text-sm text-neo-dark font-bold">Pilih folder dari sidebar untuk memulai.</p>
         </div>
       </div>
     </div>
@@ -171,11 +165,11 @@
     <div id="project-view" class="hidden p-4 md:p-6 max-w-4xl mx-auto">
       <div class="border-4 border-black bg-neo-dark shadow-neo-xl mb-6 p-4 md:p-5">
         <div class="flex items-start justify-between gap-4">
-          <div>
+          <div class="flex-1 min-w-0">
             <div class="font-mono text-neo-yellow text-xs mb-1 opacity-70">PROJECT /</div>
-            <h1 id="project-title" class="font-display text-3xl md:text-4xl text-neo-yellow tracking-widest leading-none"></h1>
+            <h1 id="project-title" class="font-display text-3xl md:text-4xl text-neo-yellow tracking-widest leading-none break-words"></h1>
           </div>
-          <button id="delete-folder-btn" onclick="confirmDeleteFolder()" class="hidden border-3 border-neo-pink bg-neo-pink px-3 py-2 text-xs font-bold shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono whitespace-nowrap self-start">🗑 HAPUS FOLDER</button>
+          <button id="delete-folder-btn" onclick="confirmDeleteFolder()" class="hidden border-3 border-neo-pink bg-neo-pink px-3 py-2 text-xs font-bold shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono whitespace-nowrap self-start">HAPUS FOLDER</button>
         </div>
       </div>
 
@@ -185,31 +179,30 @@
 
       <div id="admin-form" class="hidden border-4 border-black bg-neo-yellow/20 shadow-neo-lg p-4 md:p-5">
         <div class="border-b-4 border-black pb-3 mb-4 flex justify-between items-center">
-          <span id="form-header-title" class="font-display text-2xl tracking-widest text-neo-dark">➕ TAMBAH DOKUMEN</span>
-          <button id="btn-cancel-edit" onclick="resetForm()" class="hidden bg-neo-pink border-2 border-black text-xs font-bold px-3 py-1 shadow-neo hover:translate-x-[-1px] hover:translate-y-[-1px]">BATAL EDIT</button>
+          <span id="form-header-title" class="font-display text-2xl tracking-widest text-neo-dark">TAMBAH DOKUMEN</span>
+          <button id="btn-cancel-edit" onclick="resetForm()" class="hidden bg-neo-pink border-2 border-black text-[10px] font-bold px-3 py-1 shadow-neo hover:translate-x-[-1px] hover:translate-y-[-1px]">BATAL EDIT</button>
         </div>
 
-        <label class="block font-mono text-xs font-bold mb-1 text-neo-dark">JUDUL DOKUMEN *</label>
-        <input id="doc-title" type="text" placeholder="Nama / judul dokumen..." class="w-full border-4 border-black p-3 bg-white font-mono text-sm shadow-neo-in focus:outline-none focus:bg-neo-blue/20 mb-4" />
+        <label class="block font-mono text-xs font-bold mb-1 text-neo-dark">JUDUL DOKUMEN</label>
+        <input id="doc-title" type="text" placeholder="Judul dokumen..." class="w-full border-4 border-black p-3 bg-white font-mono text-sm shadow-neo-in focus:outline-none focus:bg-neo-blue/20 mb-4" />
 
         <div class="flex border-4 border-black mb-0 overflow-hidden">
-          <button id="tab-paste" onclick="switchTab('paste')" class="tab-btn active flex-1 py-2 text-xs font-bold border-r-2 border-black font-mono transition-all">📋 PASTE SKRIP</button>
-          <button id="tab-upload" onclick="switchTab('upload')" class="tab-btn flex-1 py-2 text-xs font-bold font-mono bg-white text-neo-dark transition-all">📁 UPLOAD FILE</button>
+          <button id="tab-paste" onclick="switchTab('paste')" class="tab-btn active flex-1 py-2 text-xs font-bold border-r-2 border-black font-mono transition-all">PASTE SKRIP</button>
+          <button id="tab-upload" onclick="switchTab('upload')" class="tab-btn flex-1 py-2 text-xs font-bold font-mono bg-white text-neo-dark transition-all">UPLOAD FILE</button>
         </div>
 
         <div id="panel-paste" class="border-4 border-t-0 border-black bg-white p-3">
           <label class="block font-mono text-xs font-bold mb-2 text-neo-dark">KONTEN SKRIP</label>
-          <textarea id="doc-content" rows="8" placeholder="Tempel kode atau teks di sini..." class="w-full border-4 border-black p-3 bg-neo-bg font-mono text-xs focus:outline-none focus:bg-neo-blue/10 resize-y shadow-neo-in"></textarea>
-          <button id="btn-save-script" onclick="saveScript()" class="mt-3 bg-neo-dark text-neo-yellow border-4 border-black py-2 px-6 font-bold text-sm shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono">SIMPAN SKRIP ▶</button>
+          <textarea id="doc-content" rows="8" placeholder="Tempel kode di sini..." class="w-full border-4 border-black p-3 bg-neo-bg font-mono text-xs focus:outline-none focus:bg-neo-blue/10 resize-y shadow-neo-in"></textarea>
+          <button id="btn-save-script" onclick="saveScript()" class="mt-3 bg-neo-dark text-neo-yellow border-4 border-black py-2 px-6 font-bold text-sm shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono">SIMPAN</button>
         </div>
 
         <div id="panel-upload" class="hidden border-4 border-t-0 border-black bg-white p-3">
           <label class="block font-mono text-xs font-bold mb-2 text-neo-dark">PILIH FILE</label>
           <div class="border-4 border-dashed border-black p-4 bg-neo-bg mb-3 text-center">
             <input id="file-input" type="file" class="w-full font-mono text-xs cursor-pointer" />
-            <p class="text-[10px] font-mono text-neo-dark/50 mt-2">Hindari karakter aneh pada nama file</p>
           </div>
-          <button onclick="uploadFile()" class="bg-neo-green border-4 border-black py-2 px-6 font-bold text-sm shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono">UPLOAD FILE ⬆</button>
+          <button onclick="uploadFile()" class="bg-neo-green border-4 border-black py-2 px-6 font-bold text-sm shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono">UPLOAD</button>
         </div>
       </div>
     </div>
@@ -217,7 +210,6 @@
 </div>
 
 <script>
-// KONFIGURASI SUPABASE
 const SUPABASE_URL    = 'https://cnzxwpouuqbqbmcjfbey.supabase.co';
 const SUPABASE_ANON   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuenh3cG91dXFicWJtY2pmYmV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0MTE3MTksImV4cCI6MjA5NTk4NzcxOX0.Su1nECD2OgNWAKAYmCydc1GBC7NBGvSh30IBvIXNOeM';
 const ADMIN_PIN       = 'sudi123';
@@ -228,18 +220,15 @@ try {
   const { createClient } = supabase;
   db = createClient(SUPABASE_URL, SUPABASE_ANON);
 } catch (e) {
-  console.error('Supabase init error:', e);
-  showToast('⚠️ Gagal terhubung ke Supabase.', 'pink');
+  showToast('Koneksi Supabase Gagal', 'pink');
 }
 
-// STATE GLOBAL
 let isAdmin          = false;
 let currentProjectId = null;
 let currentProjectName = '';
-let currentDocs      = []; // Menyimpan data doc yang sedang dibuka
-let editingDocId     = null; // ID dokumen yang sedang diedit
+let currentDocs      = []; 
+let editingDocId     = null; 
 
-// TOAST
 function showToast(msg, color = 'green') {
   const colorMap = { green: 'bg-neo-green', yellow: 'bg-neo-yellow', pink: 'bg-neo-pink', blue: 'bg-neo-blue' };
   const container = document.getElementById('toast-container');
@@ -247,13 +236,9 @@ function showToast(msg, color = 'green') {
   el.className = `toast ${colorMap[color] || 'bg-neo-green'}`;
   el.textContent = msg;
   container.appendChild(el);
-  setTimeout(() => {
-    el.style.animation = 'toastOut .3s ease forwards';
-    setTimeout(() => el.remove(), 300);
-  }, 3000);
+  setTimeout(() => { el.style.animation = 'toastOut .3s ease forwards'; setTimeout(() => el.remove(), 300); }, 3000);
 }
 
-// MODAL LOGIN
 function openModal() {
   if (isAdmin) { logout(); return; }
   document.getElementById('modal-overlay').classList.remove('hidden');
@@ -268,23 +253,15 @@ function closeModal() {
 function verifyPin() {
   const pin = document.getElementById('pin-input').value.trim();
   if (pin === ADMIN_PIN) {
-    isAdmin = true;
-    closeModal();
-    updateAdminUI();
-    showToast('✅ Admin mode aktif!', 'yellow');
+    isAdmin = true; closeModal(); updateAdminUI(); showToast('Admin mode aktif', 'yellow');
   } else {
-    document.getElementById('pin-input').value = '';
-    showToast('❌ PIN salah.', 'pink');
+    document.getElementById('pin-input').value = ''; showToast('PIN Salah', 'pink');
   }
 }
 function logout() {
-  isAdmin = false;
-  updateAdminUI();
-  resetForm();
-  showToast('👋 Admin mode dimatikan.', 'blue');
+  isAdmin = false; updateAdminUI(); resetForm(); showToast('Logout berhasil', 'blue');
 }
 
-// CONFIRM DELETE
 function openDeleteModal(msg, onConfirm) {
   document.getElementById('delete-modal-msg').textContent = msg;
   document.getElementById('delete-confirm-btn').onclick = () => { closeDeleteModal(); onConfirm(); };
@@ -296,11 +273,9 @@ function closeDeleteModal() {
   document.getElementById('delete-modal-overlay').classList.remove('flex');
 }
 
-// ADMIN UI
 function updateAdminUI() {
   const show = (id) => document.getElementById(id)?.classList.remove('hidden');
   const hide = (id) => document.getElementById(id)?.classList.add('hidden');
-
   if (isAdmin) {
     show('admin-badge'); show('logout-btn'); show('admin-topbar'); show('create-folder-btn');
     hide('lock-btn');
@@ -308,17 +283,14 @@ function updateAdminUI() {
     document.querySelectorAll('.admin-action-btn').forEach(b => b.classList.remove('hidden'));
   } else {
     hide('admin-badge'); hide('logout-btn'); hide('admin-topbar'); hide('create-folder-btn');
-    show('lock-btn'); hide('admin-form'); hide('delete-folder-btn');
-    hideCreateFolderForm();
+    show('lock-btn'); hide('admin-form'); hide('delete-folder-btn'); hideCreateFolderForm();
     document.querySelectorAll('.admin-action-btn').forEach(b => b.classList.add('hidden'));
   }
 }
 
-// SIDEBAR
 function toggleSidebar() {
   const sidebar  = document.getElementById('sidebar');
-  const isOpen   = !sidebar.classList.contains('-translate-x-full');
-  if (isOpen) closeSidebar(); else openSidebar();
+  if (!sidebar.classList.contains('-translate-x-full')) closeSidebar(); else openSidebar();
 }
 function openSidebar() {
   document.getElementById('sidebar').classList.remove('-translate-x-full');
@@ -331,11 +303,9 @@ function closeSidebar() {
   setTimeout(() => document.getElementById('overlay').classList.add('hidden'), 250);
 }
 
-// TABS & FORM
 function switchTab(tab) {
-  if(tab === 'upload' && editingDocId) return showToast("Mode edit hanya untuk skrip teks!", "warning");
-  const tabs = ['paste', 'upload'];
-  tabs.forEach(t => {
+  if(tab === 'upload' && editingDocId) return showToast("Edit hanya untuk skrip teks!", "yellow");
+  ['paste', 'upload'].forEach(t => {
     document.getElementById(`tab-${t}`).classList.remove('active');
     document.getElementById(`tab-${t}`).classList.add('bg-white', 'text-neo-dark');
     document.getElementById(`panel-${t}`).classList.add('hidden');
@@ -350,15 +320,13 @@ function resetForm() {
   document.getElementById('doc-title').value = '';
   document.getElementById('doc-content').value = '';
   document.getElementById('file-input').value = '';
-  
-  document.getElementById('form-header-title').textContent = '➕ TAMBAH DOKUMEN';
-  document.getElementById('btn-save-script').textContent = 'SIMPAN SKRIP ▶';
+  document.getElementById('form-header-title').textContent = 'TAMBAH DOKUMEN';
+  document.getElementById('btn-save-script').textContent = 'SIMPAN';
   document.getElementById('btn-save-script').classList.replace('bg-neo-blue', 'bg-neo-dark');
   document.getElementById('btn-cancel-edit').classList.add('hidden');
   switchTab('paste');
 }
 
-// FOLDER CRUD
 function showCreateFolderForm() {
   document.getElementById('create-folder-form').classList.remove('hidden');
   setTimeout(() => document.getElementById('new-folder-name').focus(), 50);
@@ -374,29 +342,27 @@ async function loadFolders() {
     const { data, error } = await db.from('projects').select('*').order('created_at', { ascending: true });
     if (error) throw error;
     const list = document.getElementById('folder-list');
-    if (!data || data.length === 0) { list.innerHTML = '<div class="text-center py-8 text-neo-dark/40 font-mono text-xs">Belum ada folder.</div>'; return; }
+    if (!data || data.length === 0) { list.innerHTML = '<div class="text-center py-8 text-neo-dark/40 font-mono text-xs">Kosong.</div>'; return; }
     list.innerHTML = '';
     data.forEach(folder => {
       const div = document.createElement('div');
       div.className = 'folder-item border-4 border-black bg-white shadow-neo p-3 cursor-pointer flex items-center gap-2 font-mono text-sm font-bold';
       div.onclick = () => openProject(folder.id, folder.name);
-      div.innerHTML = `<span class="text-lg">📁</span><span class="flex-1 truncate">${escHtml(folder.name)}</span>`;
+      div.innerHTML = `<span class="text-xs border-2 border-black px-1">[DIR]</span><span class="flex-1 truncate">${escHtml(folder.name)}</span>`;
       if (folder.id === currentProjectId) div.classList.replace('bg-white', 'bg-neo-yellow');
       list.appendChild(div);
     });
-  } catch (e) { showToast('❌ Gagal memuat folder', 'pink'); }
+  } catch (e) { showToast('Gagal memuat folder', 'pink'); }
 }
 
 async function createFolder() {
   const name = document.getElementById('new-folder-name').value.trim();
-  if (!name) return showToast('⚠️ Nama folder tidak boleh kosong.', 'yellow');
+  if (!name) return showToast('Nama kosong', 'yellow');
   try {
     const { error } = await db.from('projects').insert({ name });
     if (error) throw error;
-    hideCreateFolderForm();
-    showToast('✅ Folder berhasil dibuat!', 'green');
-    await loadFolders();
-  } catch (e) { showToast('❌ Gagal membuat folder', 'pink'); }
+    hideCreateFolderForm(); showToast('Folder dibuat!', 'green'); await loadFolders();
+  } catch (e) { showToast('Gagal buat folder', 'pink'); }
 }
 
 async function openProject(id, name) {
@@ -404,23 +370,16 @@ async function openProject(id, name) {
   document.getElementById('welcome-screen').classList.add('hidden');
   document.getElementById('project-view').classList.remove('hidden');
   document.getElementById('project-title').textContent = name;
-
   document.querySelectorAll('.folder-item').forEach(el => {
     el.classList.replace('bg-neo-yellow', 'bg-white');
     if (el.dataset.id == id) el.classList.replace('bg-white', 'bg-neo-yellow');
   });
-
-  if (isAdmin) {
-    document.getElementById('admin-form').classList.remove('hidden');
-    document.getElementById('delete-folder-btn').classList.remove('hidden');
-  }
-
-  closeSidebar();
-  await loadDocs();
+  if (isAdmin) { document.getElementById('admin-form').classList.remove('hidden'); document.getElementById('delete-folder-btn').classList.remove('hidden'); }
+  closeSidebar(); await loadDocs();
 }
 
 function confirmDeleteFolder() {
-  openDeleteModal(`Hapus folder "${currentProjectName}" beserta SEMUA dokumennya?`, deleteFolder);
+  openDeleteModal(`Hapus folder dan isinya?`, deleteFolder);
 }
 async function deleteFolder() {
   try {
@@ -429,45 +388,36 @@ async function deleteFolder() {
     currentProjectId = null; currentProjectName = '';
     document.getElementById('project-view').classList.add('hidden');
     document.getElementById('welcome-screen').classList.remove('hidden');
-    showToast('🗑 Folder dihapus.', 'yellow');
-    await loadFolders();
-  } catch (e) { showToast('❌ Gagal menghapus folder', 'pink'); }
+    showToast('Folder dihapus.', 'yellow'); await loadFolders();
+  } catch (e) { showToast('Gagal hapus folder', 'pink'); }
 }
 
-// DOCS CRUD
 async function loadDocs() {
   if (!db) return;
   const list = document.getElementById('docs-list');
-  list.innerHTML = '<div class="text-center py-8 text-neo-dark/40 font-mono text-sm">Memuat dokumen...</div>';
+  list.innerHTML = '<div class="text-center py-8 text-neo-dark/40 font-mono text-sm">Loading...</div>';
   try {
     const { data, error } = await db.from('documentations').select('*').eq('project_id', currentProjectId).order('created_at', { ascending: false });
     if (error) throw error;
-
-    currentDocs = data || []; // Simpan ke memory untuk fitur Edit
-
-    if (currentDocs.length === 0) {
-      list.innerHTML = '<div class="border-4 border-black bg-white shadow-neo p-6 text-center font-mono text-sm text-neo-dark/50">📭 Belum ada dokumen di folder ini.</div>';
-      return;
-    }
-
+    currentDocs = data || []; 
+    if (currentDocs.length === 0) { list.innerHTML = '<div class="border-4 border-black bg-white shadow-neo p-6 text-center font-mono text-sm">Kosong.</div>'; return; }
     list.innerHTML = '';
     currentDocs.forEach(doc => renderDocAccordion(list, doc));
     document.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
-  } catch (e) { showToast('❌ Gagal memuat dokumen', 'pink'); }
+  } catch (e) { showToast('Gagal muat dokumen', 'pink'); }
 }
 
-// RENDER AKORDION
 function renderDocAccordion(container, doc) {
   const isFile = !!doc.file_url;
   const adminHidden = isAdmin ? '' : 'hidden';
-  
   let bodyHtml = '';
+  
   if (!isFile) {
     bodyHtml = `
       <div class="doc-code bg-neo-dark overflow-hidden p-1">
         <div class="flex items-center justify-between px-3 py-2 bg-black/50">
-          <span class="font-mono text-neo-yellow text-xs">SKRIP TEKS</span>
-          <button onclick="copyCode(this)" data-code="${encodeURIComponent(doc.content_text)}" class="border-2 border-neo-yellow bg-neo-yellow text-neo-dark px-3 py-1 text-[10px] font-bold font-mono hover:bg-white transition-all shadow-neo-sm">COPY KODE</button>
+          <span class="font-mono text-neo-yellow text-[10px]">SKRIP TEKS</span>
+          <button onclick="copyCode(this)" data-code="${encodeURIComponent(doc.content_text)}" class="border-2 border-neo-yellow bg-neo-yellow text-neo-dark px-3 py-1 text-[10px] font-bold font-mono shadow-neo-sm">COPY</button>
         </div>
         <pre class="m-0 p-0 overflow-x-auto"><code class="hljs p-4 text-xs">${escHtml(doc.content_text)}</code></pre>
       </div>`;
@@ -475,33 +425,30 @@ function renderDocAccordion(container, doc) {
     const fname = doc.file_url.split('/').pop().split('?')[0];
     bodyHtml = `
       <div class="bg-neo-blue/20 p-5 flex items-center justify-between gap-3">
-        <div class="flex items-center gap-3">
-          <span class="text-3xl">📎</span>
-          <div>
-            <div class="font-mono text-xs font-bold text-neo-dark break-all">${escHtml(fname)}</div>
-            <div class="font-mono text-[10px] text-neo-dark/70 mt-1 uppercase">File Attachment</div>
-          </div>
+        <div>
+          <div class="font-mono text-xs font-bold text-neo-dark break-all">${escHtml(fname)}</div>
+          <div class="font-mono text-[10px] text-neo-dark/70 mt-1 uppercase">FILE LAMPIRAN</div>
         </div>
-        <a href="${doc.file_url}" target="_blank" class="border-4 border-black bg-neo-dark text-neo-yellow px-4 py-2 text-xs font-bold shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono whitespace-nowrap uppercase">⬇ UNDUH</a>
+        <a href="${doc.file_url}" target="_blank" class="border-4 border-black bg-neo-dark text-neo-yellow px-4 py-2 text-xs font-bold shadow-neo font-mono whitespace-nowrap">UNDUH</a>
       </div>`;
   }
 
   const adminBtns = `
     <div class="flex gap-2 p-3 bg-neo-bg border-t-4 border-black admin-action-btn ${adminHidden}">
-      ${!isFile ? `<button onclick="editDoc('${doc.id}')" class="flex-1 bg-neo-blue border-2 border-black font-bold py-2 shadow-neo-sm hover:translate-x-[-1px] hover:translate-y-[-1px] text-xs font-mono uppercase">✏️ Edit Skrip</button>` : ''}
-      <button onclick="confirmDeleteDoc('${doc.id}', '${escAttr(doc.file_url || '')}')" class="flex-1 bg-neo-pink border-2 border-black font-bold py-2 shadow-neo-sm hover:translate-x-[-1px] hover:translate-y-[-1px] text-xs font-mono uppercase">🗑 Hapus</button>
+      ${!isFile ? `<button onclick="editDoc('${doc.id}')" class="flex-1 bg-neo-blue border-2 border-black font-bold py-2 shadow-neo-sm text-xs font-mono uppercase">EDIT</button>` : ''}
+      <button onclick="confirmDeleteDoc('${doc.id}', '${escAttr(doc.file_url || '')}')" class="flex-1 bg-neo-pink border-2 border-black font-bold py-2 shadow-neo-sm text-xs font-mono uppercase">HAPUS</button>
     </div>
   `;
 
   const card = document.createElement('div');
   card.className = 'border-4 border-black bg-white shadow-neo mb-4 flex flex-col';
   card.innerHTML = `
-    <div class="flex items-center justify-between p-4 cursor-pointer hover:bg-neo-yellow transition-colors group select-none" onclick="toggleAccordion('${doc.id}')">
+    <div class="flex items-center justify-between p-4 cursor-pointer hover:bg-neo-yellow transition-colors select-none" onclick="toggleAccordion('${doc.id}')">
       <div class="flex items-center gap-3 overflow-hidden pr-2">
-        <span class="text-xl group-hover:scale-110 transition-transform">${isFile ? '📁' : '📄'}</span>
+        <span class="text-xs border-2 border-black px-1 font-black bg-white">${isFile ? 'FILE' : 'TEKS'}</span>
         <h3 class="font-display text-xl tracking-wider text-neo-dark truncate">${escHtml(doc.title)}</h3>
       </div>
-      <span id="icon-acc-${doc.id}" class="font-black text-xl flex-shrink-0">▼</span>
+      <span id="icon-acc-${doc.id}" class="font-black text-sm border-2 border-black px-2 bg-white flex-shrink-0">V</span>
     </div>
     <div id="content-acc-${doc.id}" class="hidden flex-col border-t-4 border-black">
       ${bodyHtml}
@@ -515,38 +462,30 @@ window.toggleAccordion = function(id) {
   const content = document.getElementById(`content-acc-${id}`);
   const icon = document.getElementById(`icon-acc-${id}`);
   if (content.classList.contains('hidden')) {
-    content.classList.remove('hidden');
-    content.classList.add('flex');
-    icon.textContent = '▲';
+    content.classList.remove('hidden'); content.classList.add('flex'); icon.textContent = '^';
   } else {
-    content.classList.add('hidden');
-    content.classList.remove('flex');
-    icon.textContent = '▼';
+    content.classList.add('hidden'); content.classList.remove('flex'); icon.textContent = 'V';
   }
 }
 
 function copyCode(btn) {
   const code = decodeURIComponent(btn.dataset.code);
   navigator.clipboard.writeText(code).then(() => {
-    const orig = btn.textContent; btn.textContent = '✓ COPIED!'; btn.classList.add('bg-neo-green');
+    const orig = btn.textContent; btn.textContent = 'COPIED!'; btn.classList.add('bg-neo-green');
     setTimeout(() => { btn.textContent = orig; btn.classList.remove('bg-neo-green'); }, 2000);
   });
 }
 
-// EDIT SCRIPT
 window.editDoc = function(docId) {
   const doc = currentDocs.find(d => d.id === docId);
   if(!doc) return;
-  
   editingDocId = docId;
   document.getElementById('doc-title').value = doc.title;
   document.getElementById('doc-content').value = doc.content_text;
-  
-  document.getElementById('form-header-title').textContent = '✏️ EDIT DOKUMEN';
-  document.getElementById('btn-save-script').textContent = 'UPDATE SKRIP ▶';
+  document.getElementById('form-header-title').textContent = 'EDIT DOKUMEN';
+  document.getElementById('btn-save-script').textContent = 'UPDATE';
   document.getElementById('btn-save-script').classList.replace('bg-neo-dark', 'bg-neo-blue');
   document.getElementById('btn-cancel-edit').classList.remove('hidden');
-  
   switchTab('paste');
   document.getElementById('admin-form').scrollIntoView({behavior: 'smooth', block: 'start'});
 }
@@ -554,56 +493,44 @@ window.editDoc = function(docId) {
 async function saveScript() {
   const title = document.getElementById('doc-title').value.trim();
   const content = document.getElementById('doc-content').value.trim();
-  if (!title) return showToast('⚠️ Judul dokumen wajib diisi.', 'yellow');
-  if (!content) return showToast('⚠️ Konten skrip tidak boleh kosong.', 'yellow');
+  if (!title) return showToast('Judul kosong', 'yellow');
+  if (!content) return showToast('Konten kosong', 'yellow');
   
   try {
     if(editingDocId) {
-      // PROSES UPDATE
       const { error } = await db.from('documentations').update({ title, content_text: content }).eq('id', editingDocId);
-      if (error) throw error;
-      showToast('✅ Skrip berhasil diupdate!', 'green');
+      if (error) throw error; showToast('Update berhasil!', 'green');
     } else {
-      // PROSES INSERT BARU
       const { error } = await db.from('documentations').insert({ project_id: currentProjectId, title, content_text: content, file_url: null });
-      if (error) throw error;
-      showToast('✅ Skrip baru berhasil disimpan!', 'green');
+      if (error) throw error; showToast('Tersimpan!', 'green');
     }
-    resetForm();
-    await loadDocs();
-  } catch (e) { showToast('❌ Gagal menyimpan.', 'pink'); }
+    resetForm(); await loadDocs();
+  } catch (e) { showToast('Gagal menyimpan', 'pink'); }
 }
 
 async function uploadFile() {
   const title = document.getElementById('doc-title').value.trim();
   const fileEl = document.getElementById('file-input');
   const file = fileEl.files[0];
-  if (!title) return showToast('⚠️ Judul dokumen wajib diisi.', 'yellow');
-  if (!file) return showToast('⚠️ Pilih file terlebih dahulu.', 'yellow');
+  if (!title) return showToast('Judul kosong', 'yellow');
+  if (!file) return showToast('Pilih file', 'yellow');
 
-  // Membersihkan nama file dari karakter spasi dan aneh
   const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
   const path = `${currentProjectId}/${Date.now()}_${safeName}`;
   
-  showToast('⏳ Sedang mengupload...', 'yellow');
+  showToast('Mengupload...', 'yellow');
   try {
-    // Pastikan di Supabase policy Storage 'script-files' mengizinkan INSERT
     const { error: upErr } = await db.storage.from(STORAGE_BUCKET).upload(path, file, { upsert: false });
     if (upErr) throw upErr;
-
     const { data: urlData } = db.storage.from(STORAGE_BUCKET).getPublicUrl(path);
-    
     const { error: dbErr } = await db.from('documentations').insert({ project_id: currentProjectId, title, file_url: urlData.publicUrl });
     if (dbErr) throw dbErr;
-
-    resetForm();
-    showToast('✅ File berhasil diupload!', 'green');
-    await loadDocs();
-  } catch (e) { showToast('❌ Upload gagal. Cek Storage Policy!', 'pink'); console.error(e); }
+    resetForm(); showToast('Upload berhasil!', 'green'); await loadDocs();
+  } catch (e) { showToast('Upload gagal', 'pink'); }
 }
 
 function confirmDeleteDoc(docId, fileUrl) {
-  openDeleteModal(`Hapus item ini secara permanen?`, () => deleteDoc(docId, fileUrl));
+  openDeleteModal(`Hapus item ini?`, () => deleteDoc(docId, fileUrl));
 }
 async function deleteDoc(docId, fileUrl) {
   try {
@@ -613,17 +540,15 @@ async function deleteDoc(docId, fileUrl) {
       if (pathParts[1]) await db.storage.from(STORAGE_BUCKET).remove([decodeURIComponent(pathParts[1])]);
     }
     await db.from('documentations').delete().eq('id', docId);
-    showToast('🗑 Item dihapus.', 'yellow');
+    showToast('Dihapus.', 'yellow');
     if(editingDocId === docId) resetForm();
     await loadDocs();
-  } catch (e) { showToast('❌ Gagal menghapus.', 'pink'); }
+  } catch (e) { showToast('Gagal hapus', 'pink'); }
 }
 
-// HELPERS
 function escHtml(str) { return str ? str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : ''; }
 function escAttr(str) { return str ? str.replace(/'/g, '&#39;').replace(/"/g, '&quot;') : ''; }
 
-// EVENT LISTENERS
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { closeModal(); closeDeleteModal(); closeSidebar(); }
   if (e.key === 'Enter' && document.getElementById('create-folder-form').classList.contains('hidden') === false) { createFolder(); }
