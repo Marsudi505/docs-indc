@@ -48,202 +48,392 @@
     ::-webkit-scrollbar-thumb { background: #1A1A1A; }
 
     /* Toast */
-    #toast-container { position: fixed; top: 80px; right: 16px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
-    .toast { padding: 10px 16px; border: 3px solid #000; box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; pointer-events: none; animation: toastIn .2s ease forwards; max-width: 280px; }
+    #toast-container {
+      position: fixed; top: 80px; right: 16px; z-index: 9999;
+      display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+    }
+    .toast {
+      padding: 10px 16px; border: 3px solid #000;
+      box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+      font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700;
+      pointer-events: none; animation: toastIn .2s ease forwards;
+      max-width: 300px;
+    }
     @keyframes toastIn { from { opacity:0; transform: translateX(40px); } to { opacity:1; transform: translateX(0); } }
     @keyframes toastOut { from { opacity:1; transform: translateX(0); } to { opacity:0; transform: translateX(40px); } }
 
     /* Sidebar slide */
     #sidebar { transition: transform .25s cubic-bezier(.4,0,.2,1); }
-    #overlay { transition: opacity .25s ease; }
+    #overlay  { transition: opacity .25s ease; }
 
-    /* Highlight code block */
-    .doc-code pre { overflow-x: auto; }
-    .doc-code pre code { font-family: 'Space Mono', monospace; font-size: 13px; }
+    /* Code block */
+    .code-wrap pre { overflow-x: auto; margin: 0; padding: 0; }
+    .code-wrap pre code { font-family: 'Space Mono', monospace; font-size: 12px; line-height: 1.6; }
 
     /* Tab active */
-    .tab-btn.active { background: #1A1A1A; color: #FFD54F; box-shadow: inset 2px 2px 0px 0px rgba(255,213,79,0.4); }
+    .tab-btn.active { background: #1A1A1A; color: #FFD54F; }
 
-    /* Folder item hover */
-    .folder-item:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px 0px rgba(0,0,0,1); }
-    .folder-item { transition: transform .15s, box-shadow .15s; }
+    /* List item */
+    .list-item       { transition: transform .12s, box-shadow .12s; cursor: pointer; }
+    .list-item:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0px 0px rgba(0,0,0,1); }
+    .list-item.selected { background: #FFD54F !important; }
 
-    /* Modal */
-    #modal-overlay { backdrop-filter: blur(2px); }
+    /* Folder item */
+    .folder-item       { transition: transform .12s, box-shadow .12s; cursor: pointer; }
+    .folder-item:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0px 0px rgba(0,0,0,1); }
+    .folder-item.active { background: #FFD54F !important; }
 
-    /* Pulse badge */
+    /* Stripe navbar */
+    .stripe-bg {
+      background-image: repeating-linear-gradient(
+        45deg, transparent, transparent 6px,
+        rgba(0,0,0,.06) 6px, rgba(0,0,0,.06) 12px
+      );
+    }
+
+    /* Grid welcome */
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(0,0,0,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* Admin stripe bar */
+    .admin-bar {
+      background: repeating-linear-gradient(
+        -45deg, #FFD54F, #FFD54F 10px, #1A1A1A 10px, #1A1A1A 20px
+      );
+    }
+
+    /* Pulse */
     @keyframes pulse-badge { 0%,100%{opacity:1;} 50%{opacity:.5;} }
     .pulse { animation: pulse-badge 1.5s infinite; }
 
-    /* Stripe pattern on navbar */
-    .stripe-bg { background-image: repeating-linear-gradient( 45deg, transparent, transparent 6px, rgba(0,0,0,.06) 6px, rgba(0,0,0,.06) 12px ); }
+    /* Modal */
+    #modal-overlay,
+    #delete-modal-overlay,
+    #edit-modal-overlay { backdrop-filter: blur(2px); }
 
-    /* Welcome grid pattern */
-    .grid-bg { background-image: linear-gradient(rgba(0,0,0,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.06) 1px, transparent 1px); background-size: 40px 40px; }
+    input[type="text"], input[type="password"], input[type="file"], textarea {
+      font-family: 'Space Mono', monospace;
+    }
 
-    /* Admin highlight */
-    .admin-bar { background: repeating-linear-gradient( -45deg, #FFD54F, #FFD54F 10px, #1A1A1A 10px, #1A1A1A 20px ); }
+    /* Breadcrumb arrow */
+    .bc-arrow { opacity: .45; }
 
-    input[type="text"], input[type="file"], textarea { font-family: 'Space Mono', monospace; }
+    /* Script view full height */
+    #script-view { display: flex; flex-direction: column; height: 100%; }
+    #script-view .code-wrap { flex: 1; overflow: auto; }
   </style>
 </head>
 <body class="bg-neo-bg min-h-screen">
 
+<!-- ==================== TOAST ==================== -->
 <div id="toast-container"></div>
 
-<div id="modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center">
+<!-- ==================== MODAL: PIN ==================== -->
+<div id="modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center">
   <div class="bg-neo-yellow border-4 border-black shadow-neo-xl p-6 w-full max-w-sm mx-4">
     <div class="flex items-center justify-between mb-4">
       <h2 class="font-display text-2xl tracking-wide text-neo-dark">DEVELOPER ACCESS</h2>
-      <button onclick="closeModal()" class="border-2 border-black bg-neo-pink px-2 py-1 text-xs font-bold shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all">X</button>
+      <button onclick="closeModal()" class="border-2 border-black bg-neo-bg px-2 py-1 text-xs font-bold shadow-neo hover:bg-neo-pink transition-all">X</button>
     </div>
     <p class="text-xs mb-3 font-mono text-neo-dark">Masukkan PIN developer:</p>
-    <input id="pin-input" type="password" placeholder="PIN" onkeydown="if(event.key==='Enter')verifyPin()" class="w-full border-4 border-black p-3 bg-white font-mono text-lg shadow-neo-in focus:outline-none focus:bg-neo-blue/20 mb-3" />
+    <input id="pin-input" type="password" placeholder="PIN..."
+      onkeydown="if(event.key==='Enter')verifyPin()"
+      class="w-full border-4 border-black p-3 bg-white font-mono text-lg shadow-neo-in focus:outline-none mb-3" />
     <button onclick="verifyPin()" class="w-full bg-neo-dark text-neo-yellow border-4 border-black font-bold py-3 shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono">
-      LOGIN ADMIN
+      UNLOCK
     </button>
   </div>
 </div>
 
-<div id="delete-modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center">
+<!-- ==================== MODAL: DELETE CONFIRM ==================== -->
+<div id="delete-modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center">
   <div class="bg-neo-pink border-4 border-black shadow-neo-xl p-6 w-full max-w-sm mx-4">
     <h2 class="font-display text-2xl tracking-wide text-neo-dark mb-2">KONFIRMASI HAPUS</h2>
     <p id="delete-modal-msg" class="text-xs font-mono mb-6 text-neo-dark">Yakin ingin menghapus item ini?</p>
     <div class="flex gap-3">
-      <button onclick="closeDeleteModal()" class="flex-1 border-4 border-black bg-white font-bold py-2 shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono text-sm">BATAL</button>
-      <button id="delete-confirm-btn" class="flex-1 border-4 border-black bg-neo-dark text-white font-bold py-2 shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono text-sm">HAPUS</button>
+      <button onclick="closeDeleteModal()" class="flex-1 border-4 border-black bg-white font-bold py-2 shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono text-sm">BATAL</button>
+      <button id="delete-confirm-btn" class="flex-1 border-4 border-black bg-neo-dark text-white font-bold py-2 shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono text-sm">HAPUS</button>
     </div>
   </div>
 </div>
 
-<nav class="sticky top-0 z-40 border-b-4 border-black bg-neo-yellow shadow-neo stripe-bg">
+<!-- ==================== MODAL: EDIT SCRIPT ==================== -->
+<div id="edit-modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
+  <div class="bg-neo-bg border-4 border-black shadow-neo-xl w-full max-w-3xl flex flex-col" style="max-height:90vh;">
+    <div class="border-b-4 border-black bg-neo-dark px-5 py-3 flex items-center justify-between flex-shrink-0">
+      <span class="font-display text-2xl tracking-widest text-neo-yellow">EDIT DOKUMEN</span>
+      <button onclick="closeEditModal()" class="border-2 border-neo-yellow text-neo-yellow px-3 py-1 text-xs font-bold hover:bg-neo-yellow hover:text-neo-dark transition-all font-mono">X TUTUP</button>
+    </div>
+    <div class="p-5 overflow-y-auto flex-1">
+      <input type="hidden" id="edit-doc-id" />
+      <label class="block font-mono text-xs font-bold mb-1 text-neo-dark">JUDUL DOKUMEN</label>
+      <input id="edit-doc-title" type="text" placeholder="Judul..."
+        class="w-full border-4 border-black p-3 bg-white font-mono text-sm shadow-neo-in focus:outline-none focus:bg-neo-blue/20 mb-4" />
+      <label class="block font-mono text-xs font-bold mb-1 text-neo-dark">KONTEN SKRIP</label>
+      <textarea id="edit-doc-content" rows="16" placeholder="Konten skrip..."
+        class="w-full border-4 border-black p-3 bg-neo-dark text-neo-green font-mono text-xs focus:outline-none resize-y shadow-neo-in"></textarea>
+    </div>
+    <div class="border-t-4 border-black px-5 py-3 flex gap-3 flex-shrink-0 bg-neo-bg">
+      <button onclick="saveEdit()" class="flex-1 bg-neo-dark text-neo-yellow border-4 border-black font-bold py-3 shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono">SIMPAN PERUBAHAN</button>
+      <button onclick="closeEditModal()" class="border-4 border-black bg-white px-5 py-3 font-bold shadow-neo hover:bg-neo-pink transition-all font-mono text-sm">BATAL</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== NAVBAR ==================== -->
+<nav class="sticky top-0 z-40 border-b-4 border-black bg-neo-yellow stripe-bg" id="navbar">
   <div class="flex items-center justify-between px-4 py-3">
-    <button id="hamburger-btn" onclick="toggleSidebar()" class="md:hidden border-3 border-black bg-neo-dark text-neo-yellow px-3 py-1 shadow-neo font-bold text-sm hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all">MENU</button>
+    <!-- Hamburger mobile -->
+    <button onclick="toggleSidebar()" class="md:hidden border-2 border-black bg-neo-dark text-neo-yellow px-3 py-2 text-sm font-bold shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono">
+      MENU
+    </button>
+
+    <!-- Logo -->
     <div class="flex items-center gap-2">
       <span class="font-display text-3xl tracking-widest text-neo-dark leading-none">INDC</span>
       <span class="border-2 border-black bg-neo-dark text-neo-yellow font-display text-lg px-2 py-0.5 shadow-neo leading-tight">DOCS</span>
     </div>
+
+    <!-- Right -->
     <div class="flex items-center gap-2">
-      <div id="admin-badge" class="hidden border-2 border-black bg-neo-green px-2 py-1 text-xs font-bold shadow-neo pulse">ADMIN MODE</div>
-      <button id="lock-btn" onclick="openModal()" class="border-3 border-black bg-white px-3 py-1 shadow-neo text-xs font-bold hover:bg-neo-pink hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all">LOGIN</button>
-      <button id="logout-btn" onclick="logout()" class="hidden border-3 border-black bg-neo-pink px-3 py-1 text-xs font-bold shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono">LOGOUT</button>
+      <div id="admin-badge" class="hidden border-2 border-black bg-neo-green px-2 py-1 text-xs font-bold shadow-neo pulse font-mono">ADMIN</div>
+      <button id="lock-btn" onclick="openModal()" class="border-2 border-black bg-white px-3 py-2 text-xs font-bold shadow-neo hover:bg-neo-blue hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono">LOGIN</button>
+      <button id="logout-btn" onclick="logout()" class="hidden border-2 border-black bg-neo-pink px-3 py-2 text-xs font-bold shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono">LOGOUT</button>
     </div>
   </div>
   <div id="admin-topbar" class="hidden admin-bar h-2 border-t-2 border-black"></div>
 </nav>
 
-<div class="flex h-[calc(100vh-65px)] md:h-[calc(100vh-61px)] overflow-hidden relative">
+<!-- ==================== LAYOUT ==================== -->
+<div class="flex overflow-hidden relative" style="height:calc(100vh - 61px);" id="main-layout">
+
+  <!-- Mobile overlay -->
   <div id="overlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/50 z-30 hidden opacity-0 md:hidden"></div>
 
-  <aside id="sidebar" class="fixed md:static top-[65px] md:top-0 left-0 h-full z-30 md:z-auto w-72 md:w-64 lg:w-72 bg-neo-bg border-r-4 border-black flex flex-col -translate-x-full md:translate-x-0 overflow-y-auto">
-    <div class="border-b-4 border-black bg-neo-dark px-4 py-3 flex items-center justify-between sticky top-0">
+  <!-- ============ SIDEBAR: FOLDER LIST ============ -->
+  <aside id="sidebar"
+    class="fixed md:static top-0 md:top-auto left-0 h-full z-30 md:z-auto
+           w-72 md:w-60 lg:w-64
+           bg-neo-bg border-r-4 border-black
+           flex flex-col
+           -translate-x-full md:translate-x-0 overflow-y-auto"
+    style="height:100%;">
+
+    <div class="border-b-4 border-black bg-neo-dark px-4 py-3 flex items-center justify-between sticky top-0 z-10">
       <span class="font-display text-xl tracking-widest text-neo-yellow">PROJECTS</span>
-      <button id="create-folder-btn" onclick="showCreateFolderForm()" class="hidden border-2 border-neo-yellow bg-neo-yellow text-neo-dark px-2 py-1 text-xs font-bold shadow-[2px_2px_0_0_rgba(255,213,79,0.4)] hover:bg-white transition-all font-mono">+ BARU</button>
+      <button id="create-folder-btn" onclick="showCreateFolderForm()" class="hidden border-2 border-neo-yellow text-neo-yellow px-2 py-1 text-xs font-bold hover:bg-neo-yellow hover:text-neo-dark transition-all font-mono">+ BARU</button>
     </div>
+
+    <!-- New folder form -->
     <div id="create-folder-form" class="hidden border-b-4 border-black bg-neo-yellow/30 px-3 py-3">
-      <input id="new-folder-name" type="text" placeholder="Nama folder..." class="w-full border-4 border-black p-2 text-sm bg-white shadow-neo-in focus:outline-none focus:bg-neo-blue/20 font-mono mb-2" />
+      <input id="new-folder-name" type="text" placeholder="Nama folder..."
+        class="w-full border-4 border-black p-2 text-sm bg-white shadow-neo-in focus:outline-none mb-2" />
       <div class="flex gap-2">
-        <button onclick="createFolder()" class="flex-1 bg-neo-dark text-neo-yellow border-4 border-black py-1 text-xs font-bold shadow-neo hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all font-mono">BUAT</button>
-        <button onclick="hideCreateFolderForm()" class="border-4 border-black bg-white px-2 py-1 text-xs font-bold shadow-neo hover:bg-neo-pink transition-all font-mono">X</button>
+        <button onclick="createFolder()" class="flex-1 bg-neo-dark text-neo-yellow border-4 border-black py-1 text-xs font-bold shadow-neo hover:shadow-neo-lg transition-all font-mono">BUAT</button>
+        <button onclick="hideCreateFolderForm()" class="border-4 border-black bg-white px-3 py-1 text-xs font-bold shadow-neo hover:bg-neo-pink transition-all font-mono">X</button>
       </div>
     </div>
+
     <div id="folder-list" class="flex-1 px-3 py-3 space-y-2">
-      <div class="text-center py-8 text-neo-dark/40 font-mono text-xs">Memuat folder...</div>
+      <div class="text-center py-8 text-neo-dark/40 font-mono text-xs">Memuat...</div>
     </div>
   </aside>
 
-  <main id="main-content" class="flex-1 overflow-y-auto">
-    <div id="welcome-screen" class="h-full flex items-center justify-center grid-bg">
-      <div class="text-center px-8 max-w-lg">
-        <div class="font-display text-8xl md:text-9xl text-neo-dark tracking-widest mb-4 leading-none">INDC<br/>DOCS</div>
+  <!-- ============ MIDDLE PANEL: SCRIPT LIST ============ -->
+  <div id="script-list-panel"
+    class="w-72 md:w-64 lg:w-72 border-r-4 border-black bg-neo-bg flex flex-col flex-shrink-0 overflow-hidden"
+    style="height:100%;">
+
+    <!-- Header with folder name -->
+    <div class="border-b-4 border-black bg-neo-dark px-4 py-3 sticky top-0 z-10 flex-shrink-0">
+      <div class="font-mono text-neo-yellow text-xs opacity-60 mb-0.5">FOLDER</div>
+      <div id="panel-folder-name" class="font-display text-xl tracking-widest text-neo-yellow truncate">—</div>
+    </div>
+
+    <!-- Admin: delete folder -->
+    <div id="delete-folder-bar" class="hidden border-b-4 border-black bg-neo-pink/30 px-3 py-2">
+      <button onclick="confirmDeleteFolder()" class="w-full border-4 border-black bg-neo-pink font-bold py-2 text-xs shadow-neo hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-neo-lg transition-all font-mono">HAPUS FOLDER INI</button>
+    </div>
+
+    <!-- Script items -->
+    <div id="script-items" class="flex-1 overflow-y-auto px-3 py-3 space-y-2">
+      <div class="text-center py-12 text-neo-dark/30 font-mono text-xs">Pilih folder terlebih dahulu</div>
+    </div>
+
+    <!-- Admin: add script button -->
+    <div id="add-doc-bar" class="hidden border-t-4 border-black bg-neo-bg px-3 py-3 flex-shrink-0">
+      <button onclick="showAddDocPanel()" class="w-full bg-neo-dark text-neo-yellow border-4 border-black font-bold py-2 text-xs shadow-neo hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-neo-lg transition-all font-mono">+ TAMBAH DOKUMEN</button>
+    </div>
+  </div>
+
+  <!-- ============ RIGHT PANEL: SCRIPT VIEW ============ -->
+  <main id="right-panel" class="flex-1 overflow-hidden flex flex-col bg-neo-bg" style="height:100%;">
+
+    <!-- Welcome screen -->
+    <div id="welcome-screen" class="flex-1 flex items-center justify-center grid-bg h-full">
+      <div class="text-center px-8 max-w-md">
+        <div class="font-display text-7xl md:text-8xl text-neo-dark tracking-widest mb-4 leading-none">INDC<br/>DOCS</div>
         <div class="border-4 border-black bg-neo-yellow shadow-neo-lg px-6 py-4 mb-6 inline-block">
-          <p class="font-mono text-sm text-neo-dark font-bold">Pilih folder dari sidebar untuk memulai.</p>
+          <p class="font-mono text-sm text-neo-dark font-bold">Sistem dokumentasi terpusat.<br/>Pilih folder lalu pilih skrip untuk mulai.</p>
+        </div>
+        <div class="flex flex-wrap justify-center gap-3 text-xs font-mono">
+          <span class="border-2 border-black bg-neo-green px-3 py-1 shadow-neo">Multi-Project</span>
+          <span class="border-2 border-black bg-neo-blue px-3 py-1 shadow-neo">Supabase Backend</span>
+          <span class="border-2 border-black bg-neo-pink px-3 py-1 shadow-neo">Admin CRUD</span>
         </div>
       </div>
     </div>
 
-    <div id="project-view" class="hidden p-4 md:p-6 max-w-4xl mx-auto">
-      <div class="border-4 border-black bg-neo-dark shadow-neo-xl mb-6 p-4 md:p-5">
-        <div class="flex items-start justify-between gap-4">
-          <div class="flex-1 min-w-0">
-            <div class="font-mono text-neo-yellow text-xs mb-1 opacity-70">PROJECT /</div>
-            <h1 id="project-title" class="font-display text-3xl md:text-4xl text-neo-yellow tracking-widest leading-none break-words"></h1>
-          </div>
-          <button id="delete-folder-btn" onclick="confirmDeleteFolder()" class="hidden border-3 border-neo-pink bg-neo-pink px-3 py-2 text-xs font-bold shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono whitespace-nowrap self-start">HAPUS FOLDER</button>
+    <!-- Script view -->
+    <div id="script-view" class="hidden flex-col h-full">
+
+      <!-- Script header / breadcrumb -->
+      <div class="border-b-4 border-black bg-neo-dark px-5 py-3 flex items-center justify-between gap-4 flex-shrink-0">
+        <div class="flex items-center gap-2 font-mono text-xs overflow-hidden">
+          <span id="bc-folder" class="text-neo-yellow opacity-60 truncate max-w-[100px] sm:max-w-[150px]"></span>
+          <span class="bc-arrow text-white">/</span>
+          <span id="bc-doc" class="text-neo-yellow font-bold truncate"></span>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span id="sv-date" class="font-mono text-xs text-neo-yellow/50 hidden sm:block"></span>
+          <button onclick="copyFullCode()" id="copy-btn" class="border-2 border-neo-yellow text-neo-yellow px-3 py-1 text-xs font-bold hover:bg-neo-yellow hover:text-neo-dark transition-all font-mono">COPY</button>
+          <button id="edit-btn" onclick="openEditModal()" class="hidden border-2 border-neo-blue text-neo-blue px-3 py-1 text-xs font-bold hover:bg-neo-blue hover:text-neo-dark transition-all font-mono">EDIT</button>
+          <button id="sv-delete-btn" onclick="confirmDeleteCurrentDoc()" class="hidden border-2 border-neo-pink text-neo-pink px-3 py-1 text-xs font-bold hover:bg-neo-pink hover:text-neo-dark transition-all font-mono">HAPUS</button>
         </div>
       </div>
 
-      <div id="docs-list" class="space-y-4 mb-6">
-        <div class="text-center py-8 text-neo-dark/40 font-mono text-sm">Memuat dokumen...</div>
+      <!-- Code block fills remaining height -->
+      <div class="code-wrap flex-1 overflow-auto bg-neo-dark">
+        <pre class="m-0 p-0 h-full"><code id="script-code-el" class="hljs p-5 text-xs block min-h-full"></code></pre>
+      </div>
+    </div>
+
+    <!-- File view (for file docs) -->
+    <div id="file-view" class="hidden flex-col h-full">
+      <div class="border-b-4 border-black bg-neo-dark px-5 py-3 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center gap-2 font-mono text-xs overflow-hidden">
+          <span id="fv-bc-folder" class="text-neo-yellow opacity-60 truncate max-w-[100px] sm:max-w-[150px]"></span>
+          <span class="bc-arrow text-white">/</span>
+          <span id="fv-bc-doc" class="text-neo-yellow font-bold truncate"></span>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <button id="fv-delete-btn" onclick="confirmDeleteCurrentDoc()" class="hidden border-2 border-neo-pink text-neo-pink px-3 py-1 text-xs font-bold hover:bg-neo-pink hover:text-neo-dark transition-all font-mono">HAPUS</button>
+        </div>
+      </div>
+      <div class="flex-1 flex items-center justify-center p-8">
+        <div class="border-4 border-black bg-white shadow-neo-xl p-8 max-w-sm w-full text-center">
+          <div class="font-display text-5xl text-neo-dark mb-4 tracking-widest">FILE</div>
+          <div id="fv-filename" class="font-mono text-sm text-neo-dark mb-2 break-all"></div>
+          <div class="font-mono text-xs text-neo-dark/50 mb-6" id="fv-date"></div>
+          <a id="fv-download-link" href="#" target="_blank" class="block w-full border-4 border-black bg-neo-dark text-neo-yellow font-bold py-3 shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono text-sm">
+            DOWNLOAD FILE
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add doc panel -->
+    <div id="add-doc-panel" class="hidden flex-col h-full overflow-y-auto">
+      <div class="border-b-4 border-black bg-neo-dark px-5 py-3 flex items-center justify-between flex-shrink-0">
+        <span class="font-display text-2xl tracking-widest text-neo-yellow">TAMBAH DOKUMEN</span>
+        <button onclick="hideAddDocPanel()" class="border-2 border-neo-yellow text-neo-yellow px-3 py-1 text-xs font-bold hover:bg-neo-yellow hover:text-neo-dark transition-all font-mono">X TUTUP</button>
       </div>
 
-      <div id="admin-form" class="hidden border-4 border-black bg-neo-yellow/20 shadow-neo-lg p-4 md:p-5">
-        <div class="border-b-4 border-black pb-3 mb-4 flex justify-between items-center">
-          <span id="form-header-title" class="font-display text-2xl tracking-widest text-neo-dark">TAMBAH DOKUMEN</span>
-          <button id="btn-cancel-edit" onclick="resetForm()" class="hidden bg-neo-pink border-2 border-black text-[10px] font-bold px-3 py-1 shadow-neo hover:translate-x-[-1px] hover:translate-y-[-1px]">BATAL EDIT</button>
-        </div>
-
+      <div class="p-5 max-w-3xl mx-auto w-full">
         <label class="block font-mono text-xs font-bold mb-1 text-neo-dark">JUDUL DOKUMEN</label>
-        <input id="doc-title" type="text" placeholder="Judul dokumen..." class="w-full border-4 border-black p-3 bg-white font-mono text-sm shadow-neo-in focus:outline-none focus:bg-neo-blue/20 mb-4" />
+        <input id="doc-title" type="text" placeholder="Judul dokumen..."
+          class="w-full border-4 border-black p-3 bg-white font-mono text-sm shadow-neo-in focus:outline-none focus:bg-neo-blue/20 mb-5" />
 
-        <div class="flex border-4 border-black mb-0 overflow-hidden">
+        <!-- Tabs -->
+        <div class="flex border-4 border-black overflow-hidden mb-0">
           <button id="tab-paste" onclick="switchTab('paste')" class="tab-btn active flex-1 py-2 text-xs font-bold border-r-2 border-black font-mono transition-all">PASTE SKRIP</button>
           <button id="tab-upload" onclick="switchTab('upload')" class="tab-btn flex-1 py-2 text-xs font-bold font-mono bg-white text-neo-dark transition-all">UPLOAD FILE</button>
         </div>
 
-        <div id="panel-paste" class="border-4 border-t-0 border-black bg-white p-3">
-          <label class="block font-mono text-xs font-bold mb-2 text-neo-dark">KONTEN SKRIP</label>
-          <textarea id="doc-content" rows="8" placeholder="Tempel kode di sini..." class="w-full border-4 border-black p-3 bg-neo-bg font-mono text-xs focus:outline-none focus:bg-neo-blue/10 resize-y shadow-neo-in"></textarea>
-          <button id="btn-save-script" onclick="saveScript()" class="mt-3 bg-neo-dark text-neo-yellow border-4 border-black py-2 px-6 font-bold text-sm shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono">SIMPAN</button>
+        <!-- Paste panel -->
+        <div id="panel-paste" class="border-4 border-t-0 border-black bg-white p-4">
+          <textarea id="doc-content" rows="14" placeholder="Tempel kode atau teks di sini..."
+            class="w-full border-4 border-black p-3 bg-neo-dark text-neo-green font-mono text-xs focus:outline-none resize-y shadow-neo-in"></textarea>
+          <button onclick="saveScript()" class="mt-4 bg-neo-dark text-neo-yellow border-4 border-black py-2 px-8 font-bold text-sm shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono">
+            SIMPAN SKRIP
+          </button>
         </div>
 
-        <div id="panel-upload" class="hidden border-4 border-t-0 border-black bg-white p-3">
-          <label class="block font-mono text-xs font-bold mb-2 text-neo-dark">PILIH FILE</label>
-          <div class="border-4 border-dashed border-black p-4 bg-neo-bg mb-3 text-center">
+        <!-- Upload panel -->
+        <div id="panel-upload" class="hidden border-4 border-t-0 border-black bg-white p-4">
+          <div class="border-4 border-dashed border-black p-6 bg-neo-bg mb-4 text-center">
             <input id="file-input" type="file" class="w-full font-mono text-xs cursor-pointer" />
+            <p class="text-xs font-mono text-neo-dark/40 mt-2">Semua tipe file didukung</p>
           </div>
-          <button onclick="uploadFile()" class="bg-neo-green border-4 border-black py-2 px-6 font-bold text-sm shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all font-mono">UPLOAD</button>
+          <button onclick="uploadFile()" class="bg-neo-green border-4 border-black py-2 px-8 font-bold text-sm shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all font-mono">
+            UPLOAD FILE
+          </button>
         </div>
       </div>
     </div>
+
   </main>
-</div>
+</div><!-- end layout -->
 
+<!-- ==================== JAVASCRIPT ==================== -->
 <script>
-const SUPABASE_URL    = 'https://cnzxwpouuqbqbmcjfbey.supabase.co';
-const SUPABASE_ANON   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuenh3cG91dXFicWJtY2pmYmV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0MTE3MTksImV4cCI6MjA5NTk4NzcxOX0.Su1nECD2OgNWAKAYmCydc1GBC7NBGvSh30IBvIXNOeM';
-const ADMIN_PIN       = 'sudi123';
-const STORAGE_BUCKET  = 'script-files';
+// ────────────────────────────────────────────────
+//  SUPABASE CONFIG — GANTI DENGAN MILIK ANDA
+// ────────────────────────────────────────────────
+const SUPABASE_URL   = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_ANON  = 'YOUR_ANON_KEY';
+const ADMIN_PIN      = 'sudi123';
+const STORAGE_BUCKET = 'script-files';
 
+// ────────────────────────────────────────────────
+//  INIT SUPABASE
+// ────────────────────────────────────────────────
 let db = null;
 try {
   const { createClient } = supabase;
   db = createClient(SUPABASE_URL, SUPABASE_ANON);
 } catch (e) {
-  showToast('Koneksi Supabase Gagal', 'pink');
+  console.error('Supabase init:', e);
+  showToast('Gagal terhubung ke Supabase. Periksa konfigurasi.', 'pink');
 }
 
-let isAdmin          = false;
-let currentProjectId = null;
+// ────────────────────────────────────────────────
+//  STATE
+// ────────────────────────────────────────────────
+let isAdmin            = false;
+let currentProjectId   = null;
 let currentProjectName = '';
-let currentDocs      = []; 
-let editingDocId     = null; 
+let currentDocId       = null;
+let currentDocFileUrl  = null;
+let currentDocContent  = '';
+let currentDocTitle    = '';
 
+// ────────────────────────────────────────────────
+//  TOAST
+// ────────────────────────────────────────────────
 function showToast(msg, color = 'green') {
-  const colorMap = { green: 'bg-neo-green', yellow: 'bg-neo-yellow', pink: 'bg-neo-pink', blue: 'bg-neo-blue' };
-  const container = document.getElementById('toast-container');
+  const colorMap = { green:'bg-neo-green', yellow:'bg-neo-yellow', pink:'bg-neo-pink', blue:'bg-neo-blue' };
   const el = document.createElement('div');
   el.className = `toast ${colorMap[color] || 'bg-neo-green'}`;
   el.textContent = msg;
-  container.appendChild(el);
-  setTimeout(() => { el.style.animation = 'toastOut .3s ease forwards'; setTimeout(() => el.remove(), 300); }, 3000);
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => {
+    el.style.animation = 'toastOut .3s ease forwards';
+    setTimeout(() => el.remove(), 300);
+  }, 3000);
 }
 
+// ────────────────────────────────────────────────
+//  MODAL: PIN
+// ────────────────────────────────────────────────
 function openModal() {
-  if (isAdmin) { logout(); return; }
   document.getElementById('modal-overlay').classList.remove('hidden');
   document.getElementById('modal-overlay').classList.add('flex');
-  setTimeout(() => document.getElementById('pin-input').focus(), 100);
+  setTimeout(() => document.getElementById('pin-input').focus(), 80);
 }
 function closeModal() {
   document.getElementById('modal-overlay').classList.add('hidden');
@@ -253,15 +443,24 @@ function closeModal() {
 function verifyPin() {
   const pin = document.getElementById('pin-input').value.trim();
   if (pin === ADMIN_PIN) {
-    isAdmin = true; closeModal(); updateAdminUI(); showToast('Admin mode aktif', 'yellow');
+    isAdmin = true;
+    closeModal();
+    updateAdminUI();
+    showToast('Admin mode aktif.', 'yellow');
   } else {
-    document.getElementById('pin-input').value = ''; showToast('PIN Salah', 'pink');
+    document.getElementById('pin-input').value = '';
+    showToast('PIN salah. Akses ditolak.', 'pink');
   }
 }
 function logout() {
-  isAdmin = false; updateAdminUI(); resetForm(); showToast('Logout berhasil', 'blue');
+  isAdmin = false;
+  updateAdminUI();
+  showToast('Admin mode dinonaktifkan.', 'blue');
 }
 
+// ────────────────────────────────────────────────
+//  MODAL: DELETE CONFIRM
+// ────────────────────────────────────────────────
 function openDeleteModal(msg, onConfirm) {
   document.getElementById('delete-modal-msg').textContent = msg;
   document.getElementById('delete-confirm-btn').onclick = () => { closeDeleteModal(); onConfirm(); };
@@ -273,60 +472,118 @@ function closeDeleteModal() {
   document.getElementById('delete-modal-overlay').classList.remove('flex');
 }
 
-function updateAdminUI() {
-  const show = (id) => document.getElementById(id)?.classList.remove('hidden');
-  const hide = (id) => document.getElementById(id)?.classList.add('hidden');
-  if (isAdmin) {
-    show('admin-badge'); show('logout-btn'); show('admin-topbar'); show('create-folder-btn');
-    hide('lock-btn');
-    if (currentProjectId) { show('admin-form'); show('delete-folder-btn'); }
-    document.querySelectorAll('.admin-action-btn').forEach(b => b.classList.remove('hidden'));
-  } else {
-    hide('admin-badge'); hide('logout-btn'); hide('admin-topbar'); hide('create-folder-btn');
-    show('lock-btn'); hide('admin-form'); hide('delete-folder-btn'); hideCreateFolderForm();
-    document.querySelectorAll('.admin-action-btn').forEach(b => b.classList.add('hidden'));
+// ────────────────────────────────────────────────
+//  MODAL: EDIT
+// ────────────────────────────────────────────────
+function openEditModal() {
+  document.getElementById('edit-doc-id').value      = currentDocId;
+  document.getElementById('edit-doc-title').value   = currentDocTitle;
+  document.getElementById('edit-doc-content').value = currentDocContent;
+  document.getElementById('edit-modal-overlay').classList.remove('hidden');
+  document.getElementById('edit-modal-overlay').classList.add('flex');
+}
+function closeEditModal() {
+  document.getElementById('edit-modal-overlay').classList.add('hidden');
+  document.getElementById('edit-modal-overlay').classList.remove('flex');
+}
+async function saveEdit() {
+  if (!db) return showToast('Supabase tidak terhubung.', 'pink');
+  const id      = document.getElementById('edit-doc-id').value;
+  const title   = document.getElementById('edit-doc-title').value.trim();
+  const content = document.getElementById('edit-doc-content').value.trim();
+  if (!title)   return showToast('Judul tidak boleh kosong.', 'yellow');
+  if (!content) return showToast('Konten tidak boleh kosong.', 'yellow');
+  try {
+    const { error } = await db.from('documentations')
+      .update({ title, content_text: content })
+      .eq('id', id);
+    if (error) throw error;
+    closeEditModal();
+    showToast('Dokumen berhasil diperbarui.', 'green');
+    // Update state & re-render view
+    currentDocTitle   = title;
+    currentDocContent = content;
+    document.getElementById('bc-doc').textContent = title;
+    const codeEl = document.getElementById('script-code-el');
+    codeEl.removeAttribute('data-highlighted');
+    codeEl.textContent = content;
+    hljs.highlightElement(codeEl);
+    // Refresh list item title
+    const li = document.querySelector(`.list-item[data-id="${id}"]`);
+    if (li) li.querySelector('.doc-item-title').textContent = title;
+  } catch (e) {
+    showToast('Gagal menyimpan: ' + e.message, 'pink');
   }
 }
 
-function toggleSidebar() {
-  const sidebar  = document.getElementById('sidebar');
-  if (!sidebar.classList.contains('-translate-x-full')) closeSidebar(); else openSidebar();
-}
-function openSidebar() {
-  document.getElementById('sidebar').classList.remove('-translate-x-full');
-  document.getElementById('overlay').classList.remove('hidden');
-  setTimeout(() => document.getElementById('overlay').classList.replace('opacity-0', 'opacity-100'), 10);
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.add('-translate-x-full');
-  document.getElementById('overlay').classList.replace('opacity-100', 'opacity-0');
-  setTimeout(() => document.getElementById('overlay').classList.add('hidden'), 250);
+// ────────────────────────────────────────────────
+//  ADMIN UI
+// ────────────────────────────────────────────────
+function updateAdminUI() {
+  const show = id => document.getElementById(id)?.classList.remove('hidden');
+  const hide = id => document.getElementById(id)?.classList.add('hidden');
+  if (isAdmin) {
+    show('admin-badge'); show('logout-btn'); show('admin-topbar');
+    show('create-folder-btn'); hide('lock-btn');
+    if (currentProjectId) {
+      show('add-doc-bar');
+      show('delete-folder-bar');
+    }
+    if (currentDocId) {
+      show('edit-btn');
+      show('sv-delete-btn');
+      show('fv-delete-btn');
+    }
+  } else {
+    hide('admin-badge'); hide('logout-btn'); hide('admin-topbar');
+    hide('create-folder-btn'); show('lock-btn');
+    hide('add-doc-bar'); hide('delete-folder-bar');
+    hide('edit-btn'); hide('sv-delete-btn'); hide('fv-delete-btn');
+    hideCreateFolderForm();
+  }
 }
 
+// ────────────────────────────────────────────────
+//  SIDEBAR MOBILE
+// ────────────────────────────────────────────────
+function toggleSidebar() {
+  const s = document.getElementById('sidebar');
+  s.classList.contains('-translate-x-full') ? openSidebar() : closeSidebar();
+}
+function openSidebar() {
+  const s = document.getElementById('sidebar');
+  const o = document.getElementById('overlay');
+  s.classList.remove('-translate-x-full');
+  o.classList.remove('hidden');
+  setTimeout(() => o.classList.replace('opacity-0','opacity-100'), 10);
+}
+function closeSidebar() {
+  const s = document.getElementById('sidebar');
+  const o = document.getElementById('overlay');
+  s.classList.add('-translate-x-full');
+  o.classList.replace('opacity-100','opacity-0');
+  setTimeout(() => o.classList.add('hidden'), 250);
+}
+
+// ────────────────────────────────────────────────
+//  TABS (add doc form)
+// ────────────────────────────────────────────────
 function switchTab(tab) {
-  if(tab === 'upload' && editingDocId) return showToast("Edit hanya untuk skrip teks!", "yellow");
-  ['paste', 'upload'].forEach(t => {
-    document.getElementById(`tab-${t}`).classList.remove('active');
-    document.getElementById(`tab-${t}`).classList.add('bg-white', 'text-neo-dark');
+  ['paste','upload'].forEach(t => {
+    const btn = document.getElementById(`tab-${t}`);
+    btn.classList.remove('active');
+    btn.classList.add('bg-white','text-neo-dark');
     document.getElementById(`panel-${t}`).classList.add('hidden');
   });
-  document.getElementById(`tab-${tab}`).classList.add('active');
-  document.getElementById(`tab-${tab}`).classList.remove('bg-white', 'text-neo-dark');
+  const active = document.getElementById(`tab-${tab}`);
+  active.classList.add('active');
+  active.classList.remove('bg-white','text-neo-dark');
   document.getElementById(`panel-${tab}`).classList.remove('hidden');
 }
 
-function resetForm() {
-  editingDocId = null;
-  document.getElementById('doc-title').value = '';
-  document.getElementById('doc-content').value = '';
-  document.getElementById('file-input').value = '';
-  document.getElementById('form-header-title').textContent = 'TAMBAH DOKUMEN';
-  document.getElementById('btn-save-script').textContent = 'SIMPAN';
-  document.getElementById('btn-save-script').classList.replace('bg-neo-blue', 'bg-neo-dark');
-  document.getElementById('btn-cancel-edit').classList.add('hidden');
-  switchTab('paste');
-}
-
+// ────────────────────────────────────────────────
+//  CREATE FOLDER FORM
+// ────────────────────────────────────────────────
 function showCreateFolderForm() {
   document.getElementById('create-folder-form').classList.remove('hidden');
   setTimeout(() => document.getElementById('new-folder-name').focus(), 50);
@@ -336,226 +593,384 @@ function hideCreateFolderForm() {
   document.getElementById('new-folder-name').value = '';
 }
 
+// ────────────────────────────────────────────────
+//  LOAD FOLDERS
+// ────────────────────────────────────────────────
 async function loadFolders() {
-  if (!db) return;
+  if (!db) {
+    document.getElementById('folder-list').innerHTML =
+      '<div class="border-4 border-black bg-neo-pink p-3 font-mono text-xs">Supabase tidak terhubung. Periksa konfigurasi URL dan KEY.</div>';
+    return;
+  }
   try {
     const { data, error } = await db.from('projects').select('*').order('created_at', { ascending: true });
     if (error) throw error;
     const list = document.getElementById('folder-list');
-    if (!data || data.length === 0) { list.innerHTML = '<div class="text-center py-8 text-neo-dark/40 font-mono text-xs">Kosong.</div>'; return; }
+    if (!data || data.length === 0) {
+      list.innerHTML = '<div class="text-center py-8 text-neo-dark/40 font-mono text-xs">Belum ada folder.</div>';
+      return;
+    }
     list.innerHTML = '';
-    data.forEach(folder => {
+    data.forEach(f => {
       const div = document.createElement('div');
-      div.className = 'folder-item border-4 border-black bg-white shadow-neo p-3 cursor-pointer flex items-center gap-2 font-mono text-sm font-bold';
-      div.onclick = () => openProject(folder.id, folder.name);
-      div.innerHTML = `<span class="text-xs border-2 border-black px-1">[DIR]</span><span class="flex-1 truncate">${escHtml(folder.name)}</span>`;
-      if (folder.id === currentProjectId) div.classList.replace('bg-white', 'bg-neo-yellow');
+      div.className = 'folder-item border-4 border-black bg-white shadow-neo px-3 py-3 flex items-center gap-2 font-mono text-sm font-bold';
+      div.dataset.id = f.id;
+      div.onclick = () => openProject(f.id, f.name);
+      div.innerHTML = `<span class="w-2 h-full inline-block bg-neo-yellow border-r-2 border-black mr-1 flex-shrink-0" style="min-width:6px;border-radius:0;"></span><span class="truncate flex-1">${escHtml(f.name)}</span>`;
+      if (f.id === currentProjectId) div.classList.add('active');
       list.appendChild(div);
     });
-  } catch (e) { showToast('Gagal memuat folder', 'pink'); }
+  } catch (e) {
+    showToast('Gagal memuat folder: ' + e.message, 'pink');
+  }
 }
 
+// ────────────────────────────────────────────────
+//  CREATE FOLDER
+// ────────────────────────────────────────────────
 async function createFolder() {
+  if (!db) return showToast('Supabase tidak terhubung.', 'pink');
   const name = document.getElementById('new-folder-name').value.trim();
-  if (!name) return showToast('Nama kosong', 'yellow');
+  if (!name) return showToast('Nama folder tidak boleh kosong.', 'yellow');
   try {
     const { error } = await db.from('projects').insert({ name });
     if (error) throw error;
-    hideCreateFolderForm(); showToast('Folder dibuat!', 'green'); await loadFolders();
-  } catch (e) { showToast('Gagal buat folder', 'pink'); }
+    hideCreateFolderForm();
+    showToast('Folder berhasil dibuat.', 'green');
+    await loadFolders();
+  } catch (e) {
+    showToast('Gagal membuat folder: ' + e.message, 'pink');
+  }
 }
 
+// ────────────────────────────────────────────────
+//  OPEN PROJECT
+// ────────────────────────────────────────────────
 async function openProject(id, name) {
-  currentProjectId = id; currentProjectName = name; resetForm();
-  document.getElementById('welcome-screen').classList.add('hidden');
-  document.getElementById('project-view').classList.remove('hidden');
-  document.getElementById('project-title').textContent = name;
+  currentProjectId   = id;
+  currentProjectName = name;
+  currentDocId       = null;
+  currentDocFileUrl  = null;
+  currentDocContent  = '';
+  currentDocTitle    = '';
+
+  // Highlight active folder
   document.querySelectorAll('.folder-item').forEach(el => {
-    el.classList.replace('bg-neo-yellow', 'bg-white');
-    if (el.dataset.id == id) el.classList.replace('bg-white', 'bg-neo-yellow');
+    el.classList.toggle('active', el.dataset.id == id);
   });
-  if (isAdmin) { document.getElementById('admin-form').classList.remove('hidden'); document.getElementById('delete-folder-btn').classList.remove('hidden'); }
-  closeSidebar(); await loadDocs();
+
+  document.getElementById('panel-folder-name').textContent = name;
+
+  // Admin UI
+  if (isAdmin) {
+    document.getElementById('add-doc-bar').classList.remove('hidden');
+    document.getElementById('delete-folder-bar').classList.remove('hidden');
+  }
+
+  // Reset right panel to welcome
+  showPanel('welcome-screen');
+
+  closeSidebar();
+  await loadScriptList();
 }
 
+// ────────────────────────────────────────────────
+//  LOAD SCRIPT LIST (middle panel)
+// ────────────────────────────────────────────────
+async function loadScriptList() {
+  if (!db || !currentProjectId) return;
+  const container = document.getElementById('script-items');
+  container.innerHTML = '<div class="text-center py-8 text-neo-dark/40 font-mono text-xs">Memuat...</div>';
+  try {
+    const { data, error } = await db.from('documentations')
+      .select('id, title, file_url, created_at')
+      .eq('project_id', currentProjectId)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      container.innerHTML = '<div class="text-center py-8 text-neo-dark/30 font-mono text-xs">Belum ada dokumen.</div>';
+      return;
+    }
+
+    container.innerHTML = '';
+    data.forEach(doc => {
+      const isFile = !!doc.file_url && !doc.file_url.startsWith('#');
+      const typeTag = isFile ? 'FILE' : 'SKRIP';
+      const typeColor = isFile ? 'bg-neo-blue' : 'bg-neo-green';
+
+      const div = document.createElement('div');
+      div.className = 'list-item border-4 border-black bg-white shadow-neo px-3 py-3';
+      div.dataset.id = doc.id;
+      div.onclick = () => openDoc(doc.id);
+      div.innerHTML = `
+        <div class="flex items-center gap-2 mb-1">
+          <span class="border-2 border-black ${typeColor} px-1.5 py-0.5 text-xs font-bold font-mono flex-shrink-0">${typeTag}</span>
+          <span class="doc-item-title font-mono text-xs font-bold text-neo-dark truncate flex-1">${escHtml(doc.title)}</span>
+        </div>
+        <div class="font-mono text-xs text-neo-dark/40">${formatDate(doc.created_at)}</div>
+      `;
+      if (doc.id === currentDocId) div.classList.add('selected');
+      container.appendChild(div);
+    });
+  } catch (e) {
+    showToast('Gagal memuat daftar: ' + e.message, 'pink');
+  }
+}
+
+// ────────────────────────────────────────────────
+//  OPEN DOC (show script or file view)
+// ────────────────────────────────────────────────
+async function openDoc(docId) {
+  if (!db) return showToast('Supabase tidak terhubung.', 'pink');
+
+  // Highlight selected
+  document.querySelectorAll('.list-item').forEach(el => {
+    el.classList.toggle('selected', el.dataset.id == docId);
+  });
+
+  try {
+    const { data, error } = await db.from('documentations').select('*').eq('id', docId).single();
+    if (error) throw error;
+
+    currentDocId      = data.id;
+    currentDocTitle   = data.title;
+    currentDocContent = data.content_text || '';
+    currentDocFileUrl = data.file_url || null;
+
+    if (data.content_text) {
+      // SCRIPT VIEW
+      document.getElementById('bc-folder').textContent = currentProjectName;
+      document.getElementById('bc-doc').textContent    = data.title;
+      document.getElementById('sv-date').textContent   = formatDate(data.created_at);
+
+      const codeEl = document.getElementById('script-code-el');
+      codeEl.removeAttribute('data-highlighted');
+      codeEl.textContent = data.content_text;
+      hljs.highlightElement(codeEl);
+
+      if (isAdmin) {
+        document.getElementById('edit-btn').classList.remove('hidden');
+        document.getElementById('sv-delete-btn').classList.remove('hidden');
+      }
+
+      showPanel('script-view');
+
+    } else if (data.file_url) {
+      // FILE VIEW
+      document.getElementById('fv-bc-folder').textContent  = currentProjectName;
+      document.getElementById('fv-bc-doc').textContent     = data.title;
+      const fname = data.file_url.split('/').pop().split('?')[0];
+      document.getElementById('fv-filename').textContent   = decodeURIComponent(fname);
+      document.getElementById('fv-date').textContent       = formatDate(data.created_at);
+      document.getElementById('fv-download-link').href     = data.file_url;
+
+      if (isAdmin) document.getElementById('fv-delete-btn').classList.remove('hidden');
+      else         document.getElementById('fv-delete-btn').classList.add('hidden');
+
+      showPanel('file-view');
+    }
+
+  } catch (e) {
+    showToast('Gagal memuat dokumen: ' + e.message, 'pink');
+  }
+}
+
+// ────────────────────────────────────────────────
+//  PANEL SWITCHER (right panel)
+// ────────────────────────────────────────────────
+function showPanel(panelId) {
+  const panels = ['welcome-screen','script-view','file-view','add-doc-panel'];
+  panels.forEach(p => {
+    const el = document.getElementById(p);
+    if (!el) return;
+    if (p === panelId) {
+      el.classList.remove('hidden');
+      el.classList.add('flex');
+    } else {
+      el.classList.add('hidden');
+      el.classList.remove('flex');
+    }
+  });
+}
+
+// ────────────────────────────────────────────────
+//  ADD DOC PANEL
+// ────────────────────────────────────────────────
+function showAddDocPanel() {
+  showPanel('add-doc-panel');
+  currentDocId = null;
+  document.querySelectorAll('.list-item').forEach(el => el.classList.remove('selected'));
+}
+function hideAddDocPanel() {
+  showPanel('welcome-screen');
+  document.getElementById('doc-title').value = '';
+  document.getElementById('doc-content').value = '';
+  document.getElementById('file-input').value = '';
+}
+
+// ────────────────────────────────────────────────
+//  SAVE SCRIPT
+// ────────────────────────────────────────────────
+async function saveScript() {
+  if (!db) return showToast('Supabase tidak terhubung.', 'pink');
+  const title   = document.getElementById('doc-title').value.trim();
+  const content = document.getElementById('doc-content').value.trim();
+  if (!title)   return showToast('Judul dokumen wajib diisi.', 'yellow');
+  if (!content) return showToast('Konten skrip tidak boleh kosong.', 'yellow');
+  try {
+    const { error } = await db.from('documentations').insert({
+      project_id: currentProjectId, title, content_text: content, file_url: null,
+    });
+    if (error) throw error;
+    document.getElementById('doc-title').value = '';
+    document.getElementById('doc-content').value = '';
+    showToast('Skrip berhasil disimpan.', 'green');
+    await loadScriptList();
+    hideAddDocPanel();
+  } catch (e) {
+    showToast('Gagal menyimpan: ' + e.message, 'pink');
+  }
+}
+
+// ────────────────────────────────────────────────
+//  UPLOAD FILE
+// ────────────────────────────────────────────────
+async function uploadFile() {
+  if (!db) return showToast('Supabase tidak terhubung.', 'pink');
+  const title  = document.getElementById('doc-title').value.trim();
+  const fileEl = document.getElementById('file-input');
+  const file   = fileEl.files[0];
+  if (!title) return showToast('Judul dokumen wajib diisi.', 'yellow');
+  if (!file)  return showToast('Pilih file terlebih dahulu.', 'yellow');
+  const storagePath = `${currentProjectId}/${Date.now()}_${file.name}`;
+  try {
+    const { error: upErr } = await db.storage.from(STORAGE_BUCKET).upload(storagePath, file, { upsert: false });
+    if (upErr) throw upErr;
+    const { data: urlData } = db.storage.from(STORAGE_BUCKET).getPublicUrl(storagePath);
+    const { error: dbErr } = await db.from('documentations').insert({
+      project_id: currentProjectId, title, content_text: null, file_url: urlData.publicUrl,
+    });
+    if (dbErr) throw dbErr;
+    document.getElementById('doc-title').value = '';
+    fileEl.value = '';
+    showToast('File berhasil diupload.', 'green');
+    await loadScriptList();
+    hideAddDocPanel();
+  } catch (e) {
+    showToast('Upload gagal: ' + e.message, 'pink');
+  }
+}
+
+// ────────────────────────────────────────────────
+//  COPY FULL CODE
+// ────────────────────────────────────────────────
+function copyFullCode() {
+  if (!currentDocContent) return showToast('Tidak ada kode untuk disalin.', 'yellow');
+  const btn = document.getElementById('copy-btn');
+  navigator.clipboard.writeText(currentDocContent).then(() => {
+    btn.textContent = 'COPIED';
+    btn.classList.add('bg-neo-green','text-neo-dark','border-neo-green');
+    setTimeout(() => {
+      btn.textContent = 'COPY';
+      btn.classList.remove('bg-neo-green','text-neo-dark','border-neo-green');
+    }, 2000);
+  }).catch(() => showToast('Gagal menyalin kode.', 'pink'));
+}
+
+// ────────────────────────────────────────────────
+//  DELETE DOC
+// ────────────────────────────────────────────────
+function confirmDeleteCurrentDoc() {
+  openDeleteModal(
+    `Hapus dokumen "${currentDocTitle}" secara permanen? Tindakan ini tidak dapat dibatalkan.`,
+    deleteCurrentDoc
+  );
+}
+async function deleteCurrentDoc() {
+  if (!db) return showToast('Supabase tidak terhubung.', 'pink');
+  try {
+    if (currentDocFileUrl) {
+      try {
+        const urlObj    = new URL(currentDocFileUrl);
+        const pathParts = urlObj.pathname.split(`/object/public/${STORAGE_BUCKET}/`);
+        if (pathParts[1]) await db.storage.from(STORAGE_BUCKET).remove([decodeURIComponent(pathParts[1])]);
+      } catch (_) {}
+    }
+    const { error } = await db.from('documentations').delete().eq('id', currentDocId);
+    if (error) throw error;
+    currentDocId = null; currentDocFileUrl = null; currentDocContent = ''; currentDocTitle = '';
+    showToast('Dokumen dihapus.', 'yellow');
+    await loadScriptList();
+    showPanel('welcome-screen');
+  } catch (e) {
+    showToast('Gagal menghapus: ' + e.message, 'pink');
+  }
+}
+
+// ────────────────────────────────────────────────
+//  DELETE FOLDER
+// ────────────────────────────────────────────────
 function confirmDeleteFolder() {
-  openDeleteModal(`Hapus folder dan isinya?`, deleteFolder);
+  openDeleteModal(
+    `Hapus folder "${currentProjectName}" beserta SEMUA dokumennya? Tindakan ini tidak dapat dibatalkan.`,
+    deleteFolder
+  );
 }
 async function deleteFolder() {
+  if (!db) return showToast('Supabase tidak terhubung.', 'pink');
   try {
     await db.from('documentations').delete().eq('project_id', currentProjectId);
-    await db.from('projects').delete().eq('id', currentProjectId);
-    currentProjectId = null; currentProjectName = '';
-    document.getElementById('project-view').classList.add('hidden');
-    document.getElementById('welcome-screen').classList.remove('hidden');
-    showToast('Folder dihapus.', 'yellow'); await loadFolders();
-  } catch (e) { showToast('Gagal hapus folder', 'pink'); }
-}
-
-async function loadDocs() {
-  if (!db) return;
-  const list = document.getElementById('docs-list');
-  list.innerHTML = '<div class="text-center py-8 text-neo-dark/40 font-mono text-sm">Loading...</div>';
-  try {
-    const { data, error } = await db.from('documentations').select('*').eq('project_id', currentProjectId).order('created_at', { ascending: false });
+    const { error } = await db.from('projects').delete().eq('id', currentProjectId);
     if (error) throw error;
-    currentDocs = data || []; 
-    if (currentDocs.length === 0) { list.innerHTML = '<div class="border-4 border-black bg-white shadow-neo p-6 text-center font-mono text-sm">Kosong.</div>'; return; }
-    list.innerHTML = '';
-    currentDocs.forEach(doc => renderDocAccordion(list, doc));
-    document.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
-  } catch (e) { showToast('Gagal muat dokumen', 'pink'); }
-}
-
-function renderDocAccordion(container, doc) {
-  const isFile = !!doc.file_url;
-  const adminHidden = isAdmin ? '' : 'hidden';
-  let bodyHtml = '';
-  
-  if (!isFile) {
-    bodyHtml = `
-      <div class="doc-code bg-neo-dark overflow-hidden p-1">
-        <div class="flex items-center justify-between px-3 py-2 bg-black/50">
-          <span class="font-mono text-neo-yellow text-[10px]">SKRIP TEKS</span>
-          <button onclick="copyCode(this)" data-code="${encodeURIComponent(doc.content_text)}" class="border-2 border-neo-yellow bg-neo-yellow text-neo-dark px-3 py-1 text-[10px] font-bold font-mono shadow-neo-sm">COPY</button>
-        </div>
-        <pre class="m-0 p-0 overflow-x-auto"><code class="hljs p-4 text-xs">${escHtml(doc.content_text)}</code></pre>
-      </div>`;
-  } else {
-    const fname = doc.file_url.split('/').pop().split('?')[0];
-    bodyHtml = `
-      <div class="bg-neo-blue/20 p-5 flex items-center justify-between gap-3">
-        <div>
-          <div class="font-mono text-xs font-bold text-neo-dark break-all">${escHtml(fname)}</div>
-          <div class="font-mono text-[10px] text-neo-dark/70 mt-1 uppercase">FILE LAMPIRAN</div>
-        </div>
-        <a href="${doc.file_url}" target="_blank" class="border-4 border-black bg-neo-dark text-neo-yellow px-4 py-2 text-xs font-bold shadow-neo font-mono whitespace-nowrap">UNDUH</a>
-      </div>`;
-  }
-
-  const adminBtns = `
-    <div class="flex gap-2 p-3 bg-neo-bg border-t-4 border-black admin-action-btn ${adminHidden}">
-      ${!isFile ? `<button onclick="editDoc('${doc.id}')" class="flex-1 bg-neo-blue border-2 border-black font-bold py-2 shadow-neo-sm text-xs font-mono uppercase">EDIT</button>` : ''}
-      <button onclick="confirmDeleteDoc('${doc.id}', '${escAttr(doc.file_url || '')}')" class="flex-1 bg-neo-pink border-2 border-black font-bold py-2 shadow-neo-sm text-xs font-mono uppercase">HAPUS</button>
-    </div>
-  `;
-
-  const card = document.createElement('div');
-  card.className = 'border-4 border-black bg-white shadow-neo mb-4 flex flex-col';
-  card.innerHTML = `
-    <div class="flex items-center justify-between p-4 cursor-pointer hover:bg-neo-yellow transition-colors select-none" onclick="toggleAccordion('${doc.id}')">
-      <div class="flex items-center gap-3 overflow-hidden pr-2">
-        <span class="text-xs border-2 border-black px-1 font-black bg-white">${isFile ? 'FILE' : 'TEKS'}</span>
-        <h3 class="font-display text-xl tracking-wider text-neo-dark truncate">${escHtml(doc.title)}</h3>
-      </div>
-      <span id="icon-acc-${doc.id}" class="font-black text-sm border-2 border-black px-2 bg-white flex-shrink-0">V</span>
-    </div>
-    <div id="content-acc-${doc.id}" class="hidden flex-col border-t-4 border-black">
-      ${bodyHtml}
-      ${adminBtns}
-    </div>
-  `;
-  container.appendChild(card);
-}
-
-window.toggleAccordion = function(id) {
-  const content = document.getElementById(`content-acc-${id}`);
-  const icon = document.getElementById(`icon-acc-${id}`);
-  if (content.classList.contains('hidden')) {
-    content.classList.remove('hidden'); content.classList.add('flex'); icon.textContent = '^';
-  } else {
-    content.classList.add('hidden'); content.classList.remove('flex'); icon.textContent = 'V';
+    currentProjectId = null; currentProjectName = '';
+    currentDocId = null; currentDocContent = '';
+    document.getElementById('panel-folder-name').textContent = '—';
+    document.getElementById('script-items').innerHTML =
+      '<div class="text-center py-12 text-neo-dark/30 font-mono text-xs">Pilih folder terlebih dahulu</div>';
+    document.getElementById('add-doc-bar').classList.add('hidden');
+    document.getElementById('delete-folder-bar').classList.add('hidden');
+    showPanel('welcome-screen');
+    showToast('Folder dihapus.', 'yellow');
+    await loadFolders();
+  } catch (e) {
+    showToast('Gagal menghapus folder: ' + e.message, 'pink');
   }
 }
 
-function copyCode(btn) {
-  const code = decodeURIComponent(btn.dataset.code);
-  navigator.clipboard.writeText(code).then(() => {
-    const orig = btn.textContent; btn.textContent = 'COPIED!'; btn.classList.add('bg-neo-green');
-    setTimeout(() => { btn.textContent = orig; btn.classList.remove('bg-neo-green'); }, 2000);
-  });
+// ────────────────────────────────────────────────
+//  HELPERS
+// ────────────────────────────────────────────────
+function escHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function formatDate(str) {
+  if (!str) return '';
+  return new Date(str).toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' });
 }
 
-window.editDoc = function(docId) {
-  const doc = currentDocs.find(d => d.id === docId);
-  if(!doc) return;
-  editingDocId = docId;
-  document.getElementById('doc-title').value = doc.title;
-  document.getElementById('doc-content').value = doc.content_text;
-  document.getElementById('form-header-title').textContent = 'EDIT DOKUMEN';
-  document.getElementById('btn-save-script').textContent = 'UPDATE';
-  document.getElementById('btn-save-script').classList.replace('bg-neo-dark', 'bg-neo-blue');
-  document.getElementById('btn-cancel-edit').classList.remove('hidden');
-  switchTab('paste');
-  document.getElementById('admin-form').scrollIntoView({behavior: 'smooth', block: 'start'});
-}
-
-async function saveScript() {
-  const title = document.getElementById('doc-title').value.trim();
-  const content = document.getElementById('doc-content').value.trim();
-  if (!title) return showToast('Judul kosong', 'yellow');
-  if (!content) return showToast('Konten kosong', 'yellow');
-  
-  try {
-    if(editingDocId) {
-      const { error } = await db.from('documentations').update({ title, content_text: content }).eq('id', editingDocId);
-      if (error) throw error; showToast('Update berhasil!', 'green');
-    } else {
-      const { error } = await db.from('documentations').insert({ project_id: currentProjectId, title, content_text: content, file_url: null });
-      if (error) throw error; showToast('Tersimpan!', 'green');
+// ────────────────────────────────────────────────
+//  KEYBOARD
+// ────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeDeleteModal(); closeEditModal(); closeSidebar(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    if (isAdmin && currentProjectId) {
+      const pastePanel = document.getElementById('panel-paste');
+      if (!pastePanel.classList.contains('hidden')) saveScript();
     }
-    resetForm(); await loadDocs();
-  } catch (e) { showToast('Gagal menyimpan', 'pink'); }
-}
-
-async function uploadFile() {
-  const title = document.getElementById('doc-title').value.trim();
-  const fileEl = document.getElementById('file-input');
-  const file = fileEl.files[0];
-  if (!title) return showToast('Judul kosong', 'yellow');
-  if (!file) return showToast('Pilih file', 'yellow');
-
-  const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
-  const path = `${currentProjectId}/${Date.now()}_${safeName}`;
-  
-  showToast('Mengupload...', 'yellow');
-  try {
-    const { error: upErr } = await db.storage.from(STORAGE_BUCKET).upload(path, file, { upsert: false });
-    if (upErr) throw upErr;
-    const { data: urlData } = db.storage.from(STORAGE_BUCKET).getPublicUrl(path);
-    const { error: dbErr } = await db.from('documentations').insert({ project_id: currentProjectId, title, file_url: urlData.publicUrl });
-    if (dbErr) throw dbErr;
-    resetForm(); showToast('Upload berhasil!', 'green'); await loadDocs();
-  } catch (e) { showToast('Upload gagal', 'pink'); }
-}
-
-function confirmDeleteDoc(docId, fileUrl) {
-  openDeleteModal(`Hapus item ini?`, () => deleteDoc(docId, fileUrl));
-}
-async function deleteDoc(docId, fileUrl) {
-  try {
-    if (fileUrl) {
-      const urlObj = new URL(fileUrl);
-      const pathParts = urlObj.pathname.split(`/object/public/${STORAGE_BUCKET}/`);
-      if (pathParts[1]) await db.storage.from(STORAGE_BUCKET).remove([decodeURIComponent(pathParts[1])]);
-    }
-    await db.from('documentations').delete().eq('id', docId);
-    showToast('Dihapus.', 'yellow');
-    if(editingDocId === docId) resetForm();
-    await loadDocs();
-  } catch (e) { showToast('Gagal hapus', 'pink'); }
-}
-
-function escHtml(str) { return str ? str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : ''; }
-function escAttr(str) { return str ? str.replace(/'/g, '&#39;').replace(/"/g, '&quot;') : ''; }
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') { closeModal(); closeDeleteModal(); closeSidebar(); }
-  if (e.key === 'Enter' && document.getElementById('create-folder-form').classList.contains('hidden') === false) { createFolder(); }
+  }
 });
 
+// ────────────────────────────────────────────────
+//  INIT
+// ────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
   hljs.configure({ ignoreUnescapedHTML: true });
+  document.getElementById('new-folder-name').addEventListener('keydown', e => {
+    if (e.key === 'Enter') createFolder();
+  });
   loadFolders();
 });
 </script>
