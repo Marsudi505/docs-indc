@@ -170,7 +170,7 @@
   <div class="flex items-center justify-between px-4 py-3">
     <!-- Hamburger (mobile) -->
     <button id="hamburger-btn" onclick="toggleSidebar()" class="md:hidden border-3 border-black bg-neo-dark text-neo-yellow p-2 shadow-neo font-bold text-lg leading-none hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all">
-      тШ░
+      ░
     </button>
 
     <!-- Logo -->
@@ -532,7 +532,7 @@ async function loadFolders() {
       div.dataset.id = folder.id;
       div.dataset.name = folder.name;
       div.onclick = () => openProject(folder.id, folder.name);
-      div.innerHTML = `<span class="text-lg">ЁЯУБ</span><span class="flex-1 truncate">${escHtml(folder.name)}</span>`;
+      div.innerHTML = `<span class="text-lg"></span><span class="flex-1 truncate">${escHtml(folder.name)}</span>`;
       // Highlight active
       if (folder.id === currentProjectId) div.classList.replace('bg-white', 'bg-neo-yellow');
       list.appendChild(div);
@@ -607,7 +607,7 @@ async function loadDocs() {
     if (error) throw error;
 
     if (!data || data.length === 0) {
-      list.innerHTML = '<div class="border-4 border-black bg-white shadow-neo p-6 text-center font-mono text-sm text-neo-dark/50">ЁЯУн Belum ada dokumen di folder ini.</div>';
+      list.innerHTML = '<div class="border-4 border-black bg-white shadow-neo p-6 text-center font-mono text-sm text-neo-dark/50">Belum ada dokumen di folder ini.</div>';
       return;
     }
 
